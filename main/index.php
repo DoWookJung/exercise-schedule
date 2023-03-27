@@ -3,5 +3,5 @@
     include "../include/main.php";
 
 
-    //테스트
+    
 ?>

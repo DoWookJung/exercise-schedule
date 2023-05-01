@@ -9,7 +9,7 @@ $date = $_GET["date"];
 $sql = "SELECT * FROM workout_records WHERE date = '$date'";
 
 // 쿼리 실행
-$result = mysqli_query($conn, $sql);
+$result = mysqli_query($con, $sql);
 
 // 결과 출력
 if (mysqli_num_rows($result) > 0) {
@@ -26,5 +26,5 @@ if (mysqli_num_rows($result) > 0) {
 }
 
 // 데이터베이스 접속 종료
-mysqli_close($conn);
+mysqli_close($con);
 ?>

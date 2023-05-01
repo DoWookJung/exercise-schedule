@@ -56,7 +56,7 @@
     }
 ?>
     <li>|</li>
-    <li><a href="../mboard/index.php?type=list&table=_notice">운동 일지</a></li>
+    <li><a href="../mboard/cal.html">운동 일지</a></li>
     <li><a href="../mboard/index.php?type=list&table=_notice">식단 일지</a></li>
     <li><a href="../mboard/index.php?type=list&table=_notice">공지 게시판</a></li>
     <li><a href="../mboard/index.php?type=list&table=_qna">QNA 게시판</a></li>

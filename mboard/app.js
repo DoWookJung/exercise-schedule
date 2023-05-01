@@ -26,7 +26,7 @@ for (let i = 0; i < 6; i++) {
       if (year === today.getFullYear() && month === today.getMonth() + 1 && date === today.getDate()) {
         // 오늘 날짜 표시
         cell.classList.add('today');
-      }
+      } 
       date++;
     }
     row.appendChild(cell);

@@ -1,9 +1,15 @@
+<?php
+  include "./include/db_connect.php";
+  $sql = "select exercise from workout_records";
+  $result = mysqli_query($con, $sql);
+?>
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <title>운동일지</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" type="text/css" href="./mboard/style.css">
 </head>
 <body>
   <div class="container">
@@ -20,6 +26,14 @@
       </div>
       <div class="form-group">
         <label for="exercise">운동 종목</label>
+          <?php 
+          echo "<select name='se_exercise' name='se_exercise'>";
+          while ($row = mysqli_fetch_assoc($result)) {
+            echo "<option value='" .  $row['name'] . "</option>";
+          }
+          echo "</select>";
+          ?>
+        </select>
         <input type="text" id="exercise" name="exercise" required>
       </div>
       <div class="form-group">
@@ -63,6 +77,7 @@
       <ul></ul>
     </div>
   </div>
-  <!-- <script src="script.js"></script> -->
+  <script src="script.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

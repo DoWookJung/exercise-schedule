@@ -21,7 +21,7 @@ for (let i = 0; i < 6; i++) {
     } else {
       const link = document.createElement('a');
       link.textContent = date;
-      link.href = `../index.php?`;
+      link.href = `../index.php?year=${year}&month=${month}&date=${date}`;
       cell.appendChild(link);
       if (year === today.getFullYear() && month === today.getMonth() + 1 && date === today.getDate()) {
         // 오늘 날짜 표시

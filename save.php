@@ -4,7 +4,7 @@ include "./include/db_connect.php";
 // POST 데이터 가져오기
 $date = $_POST["date"];
 $weight = $_POST["weight"];
-$exercise = $_POST["exercise"];
+$exercise = $_POST["exercise_name"];
 $reps = $_POST["reps"];
 $sets = $_POST["sets"];
 
@@ -13,7 +13,10 @@ $sql = "INSERT INTO workout_records (date, weight, exercise, reps, sets) VALUES 
 
 // 쿼리 실행
 if (mysqli_query($con, $sql)) {
-    echo "Record added successfully";
+    // echo "Record added successfully";
+    echo "<script>
+	    location.href = 'index.php';
+	   </script>";
 } else {
     echo "Error: " . $sql . "<br>" . mysqli_error($con);
 }

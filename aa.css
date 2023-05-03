@@ -1,0 +1,59 @@
+.monthly_calendar{
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.week{
+    height: 67px;
+    padding: 0 14px;
+    width: 100%;
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+    background-color: #f8f8f8;
+}
+
+.week th{
+    padding: 0 8px;
+    text-align: left;
+}
+
+.month_table_six{
+    width: 100%;
+    height: 90%;
+}
+.month_table_six div{
+    height: 16.6%;
+}
+
+.month_row{
+    position: relative;
+    padding: 0 14px;
+}
+/* .month_row table{
+    position: relative;
+    width: 100%;
+    height: 100%;
+} */
+.month_row table td{
+    padding: 0 8px;
+}
+.schedule_list{
+    width: 100%;
+    height: 15px;
+    position: relative;
+}
+.table_grid{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 0 16px;
+    top: 0;
+    left: 0;
+}
+.table_grid td{
+    border-left: 1px solid #f4f4f4;
+    border-bottom: 1px solid #f4f4f4;
+}

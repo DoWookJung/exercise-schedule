@@ -15,7 +15,7 @@ $sql = "INSERT INTO workout_records (date, weight, exercise, reps, sets) VALUES 
 if (mysqli_query($con, $sql)) {
     // echo "Record added successfully";
     echo "<script>
-	    location.href = 'index.php';
+	    location.href = 'index.php?date=$date';
 	   </script>";
 } else {
     echo "Error: " . $sql . "<br>" . mysqli_error($con);

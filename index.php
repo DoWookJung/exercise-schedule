@@ -13,11 +13,15 @@
     </h1>
     <form action="save.php" method="post">
       <div class="form-group">
-        <?php
-          $date = $_GET['date'];
-        ?>
+      <?php 
+      if(isset($_GET['date'])) {
+        $date = $_GET['date'];
+      } else {
+        $date = null; // date가 없으면 null로 초기화
+      }
+      ?> 
         <label for="date">날짜</label>
-        <input type="text" id="date" name="date" value="<?php echo $date; ?>">
+        <input type="date" id="date" name="date" value="<?php echo $date; ?>">
       </div>
       <div class="form-group">
         <label for="exercise_name">운동 종목</label>
@@ -115,7 +119,7 @@
     <h2>저장한 운동 기록</h2>
     <?php
 	  include "./include/db_connect.php";
-    $sql = "select * from workout_records where date='$date'";	
+    $sql = "select * from workout_records where date='$date'";	  
 	  $result = mysqli_query($con, $sql);			// SQL 명령 실행
     // check if any exercises were found
     if (mysqli_num_rows($result) > 0) {
@@ -134,13 +138,17 @@
     } else {
       echo "<p>아직 추가한 운동이 없습니다.</p>";
     }
-    echo "<input type='submit' name='delete_submit' value='삭제하기'>";
+    // $cal_modify_url = "cal_modify.php?type=modify_form&table=$table&num=$num&page=$page";
+		$cal_delete_url = "cal_delete.php?id=$id";
     // close the database connection
     mysqli_close($con);
     ?>
+    <!-- <li><button onclick="location.href='<?=$cal_modify_url?>'">수정하기</button></li>    -->
+	  <li><button onclick="location.href='<?=$cal_delete_url?>'">삭제하기</button></li>
     
-  <!-- <script src="script.js"></script> -->
-  <script>
+   
+     
+  <!-- <script>
 		// 운동 항목 검색 기능 구현
 		var exerciseList = document.getElementById("exercise");
 		var exerciseName = document.getElementById("exercise_name");
@@ -159,7 +167,7 @@
 				}
 			}
 		});
-	</script>
+	</script> -->
 </body>
 </html>
 

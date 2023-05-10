@@ -5,6 +5,11 @@
   <title>운동일지</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" type="text/css" href="./mboard/style.css">
+  <style>
+  input[type='text'] {
+    text-align: center;
+  }
+</style>
 </head>
 <body>
   <div class="container">
@@ -117,57 +122,39 @@
     </form>
     <hr>
     <h2>저장한 운동 기록</h2>
+    
     <?php
 	  include "./include/db_connect.php";
     $sql = "select * from workout_records where date='$date'";	  
 	  $result = mysqli_query($con, $sql);			// SQL 명령 실행
+    $id = null;
     // check if any exercises were found
     if (mysqli_num_rows($result) > 0) {
+      echo "<form action='cal_modify.php' method='post'>";
+      echo "<input type='hidden' name='date' value='" . $date . "'>"; // date 값을 추가
       echo "<table>";
-      echo "<tr><th>선택</th><th>운동 종목</th><th>무게 (kg)</th><th>횟수</th><th>세트 수</th></th>";
+      echo "<tr><th>운동 종목</th><th>무게 (kg)</th><th>횟수</th><th>세트 수</th></th>";
       while($row = mysqli_fetch_assoc($result)) {
         echo "<tr>";
-        echo "<td><input type='checkbox' name='delete_check[]' value='" . $row['id'] . "'></td>";
-        echo "<td>" . $row['exercise'] . "</td>";
-        echo "<td>" . $row['weight'] . "</td>";
-        echo "<td>" . $row['reps'] . "</td>";
-        echo "<td>" . $row['sets'] . "</td>";
+        echo "<input type='hidden' name='id[]' value='" . $row['id'] . "'>"; // id 값을 추가
+        echo "<td><input type='text' name='exercise[]' value='" . $row['exercise'] . "'></td>";
+        echo "<td><input type='text' name='weight[]' value='" . $row['weight'] . "'></td>";
+        echo "<td><input type='text' name='reps[]' value='" . $row['reps'] . "'></td>";
+        echo "<td><input type='text' name='sets[]' value='" . $row['sets'] . "'></td>";
+        echo "<td><input type='submit' name='modify' value='수정'></td>";
+        echo "<td><button type='button' onclick=\"location.href='cal_delete.php?id=" . $row['id'] . "&date=".$date. "'\">삭제</button></td>";
+        $id = $row['id'];
         echo "</tr>";
       }
       echo "</table>";
+      echo "</form>";
+      
+      echo "</table>";
+      echo "</form>";
     } else {
       echo "<p>아직 추가한 운동이 없습니다.</p>";
     }
-    // $cal_modify_url = "cal_modify.php?type=modify_form&table=$table&num=$num&page=$page";
-		$cal_delete_url = "cal_delete.php?id=$id";
-    // close the database connection
-    mysqli_close($con);
-    ?>
-    <!-- <li><button onclick="location.href='<?=$cal_modify_url?>'">수정하기</button></li>    -->
-	  <li><button onclick="location.href='<?=$cal_delete_url?>'">삭제하기</button></li>
-    
-   
-     
-  <!-- <script>
-		// 운동 항목 검색 기능 구현
-		var exerciseList = document.getElementById("exercise");
-		var exerciseName = document.getElementById("exercise_name");
-		
-		exerciseName.addEventListener("input", function() {
-			var input = exerciseName.value.toLowerCase();
-			var options = exerciseList.getElementsByTagName("option");
-			
-			for (var i = 0; i < options.length; i++) {
-				var optionText = options[i].value.toLowerCase();
-				
-				if (optionText.indexOf(input) > -1) {
-					options[i].style.display = "";
-				} else {
-					options[i].style.display = "none";
-				}
-			}
-		});
-	</script> -->
+    mysqli_close($con);?>
 </body>
 </html>
 

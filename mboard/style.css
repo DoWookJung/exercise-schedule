@@ -1,4 +1,4 @@
-#calendar {
+/* #calendar {
     margin: 0 auto;
     width: 500px;
     font-family: sans-serif;
@@ -31,4 +31,62 @@
   .today {
     background-color: yellow;
   }
-  
+   */
+   /* 캘린더 스타일 */
+   .dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+
+  .dropdown form {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: none;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+  }
+
+  .dropdown.show form {
+    display: block;
+  }
+#calendar {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin-top: 20px;
+}
+
+#dateDisplay {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+td {
+  cursor: pointer;
+}
+
+td.today {
+  font-weight: bold;
+  background-color: #f3f3f3;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+a:hover {
+  text-decoration: underline;
+}

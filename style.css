@@ -1,4 +1,4 @@
-/* Reset styles
+/* Reset styles */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -27,14 +27,14 @@
     margin-bottom: 0.5rem;
   }
   
-  input[type="submit"] {
+  /* input[type="submit"] {
     background-color: #4CAF50;
     color: #fff;
     padding: 0.5rem;
     border: none;
     border-radius: 0.25rem;
     cursor: pointer;
-  }
+  } */
   input[type="text"] {
     text-align: center;
   }
@@ -58,44 +58,17 @@
   table td:last-child {
     text-align: right;
   }
-
-   */
-   /* 캘린더 스타일 */
-#calendar {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  margin-top: 20px;
-}
-
-#dateDisplay {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 10px;
-  border: 1px solid #ccc;
-}
-
-td {
-  cursor: pointer;
-}
-
-td.today {
-  font-weight: bold;
-  background-color: #f3f3f3;
-}
-
-a {
-  text-decoration: none;
-  color: #333;
-}
-
-a:hover {
-  text-decoration: underline;
-}
+  .my-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .my-button:hover {
+    background-color: #0056b3;
+  }
+  

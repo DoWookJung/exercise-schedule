@@ -2,29 +2,8 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>캘린더</title>
+    <title>달력</title>
     <link rel="stylesheet" type="text/css" href="style.css">
-    <style>
-      .dropdown {
-        position: relative;
-        display: inline-block;
-        cursor: pointer;
-      }
-
-      .dropdown form {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        display: none;
-        padding: 10px;
-        background-color: #f9f9f9;
-        border: 1px solid #ccc;
-      }
-
-      .dropdown.show form {
-        display: block;
-      }
-    </style>
   </head>
   <body>
     <div id="calendar">
@@ -42,7 +21,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- 여기에 날짜 데이터를 동적으로 추가할 예정입니다. -->
+          <!-- 여기에 동적으로 날짜 데이터를 추가할 예정입니다. -->
         </tbody>
       </table>
     </div>
@@ -50,72 +29,6 @@
       const calendarBody = document.querySelector('#calendar tbody');
       let currentYear;
       let currentMonth;
-
-      // 클릭 이벤트 핸들러
-      function handleClick() {
-        const yearSelect = document.createElement('select');
-        const monthSelect = document.createElement('select');
-
-        // 년도 옵션 생성
-        for (let i = 1990; i <= 2030; i++) {
-          const option = document.createElement('option');
-          option.value = i;
-          option.textContent = i;
-          if (i === currentYear) {
-            option.selected = true;
-          }
-          yearSelect.appendChild(option);
-        }
-
-        // 개월수 옵션 생성
-        for (let i = 1; i <= 12; i++) {
-          const option = document.createElement('option');
-          option.value = i;
-          option.textContent = i;
-          if (i === currentMonth) {
-            option.selected = true;
-          }
-          monthSelect.appendChild(option);
-        }
-
-        // 변경 폼 생성
-        const form = document.createElement('form');
-        form.appendChild(yearSelect);
-        form.appendChild(document.createTextNode('년'));
-        form.appendChild(monthSelect);
-        form.appendChild(document.createTextNode('월'));
-
-        // 변경 폼을 드롭다운 형식으로 표시
-        const dropdown = document.createElement('div');
-        dropdown.classList.add('dropdown');
-        dropdown.appendChild(form);
-
-        // 드롭다운 토글
-        dropdown.addEventListener('click', function () {
-          form.classList.toggle('show');
-        });
-
-        // 변경된 날짜 적용
-        form.addEventListener('change', function (event) {
-          const selectedYear = parseInt(yearSelect.value);
-          const selectedMonth = parseInt(monthSelect.value);
-
-          if (!isNaN(selectedYear) && !isNaN(selectedMonth)) {
-            updateCalendar(selectedYear, selectedMonth);
-          } else {
-            alert('유효한 년도와 개월수를 선택하세요.');
-          }
-
-          form.classList.remove('show');
-          event.stopPropagation();
-        });
-
-
-        // h1 요소 내에 드롭다운 추가
-        const dateDisplay = document.querySelector('#dateDisplay');
-        dateDisplay.textContent = `${currentYear}년 ${currentMonth}월`;
-        dateDisplay.appendChild(dropdown);
-      }
 
       function updateCalendar(year, month) {
         const today = new Date();
@@ -138,7 +51,7 @@
             if (i === 0 && j < firstDay.getDay()) {
               // 이번 달 시작 이전의 빈 칸
             } else if (date > lastDay.getDate()) {
-              // 이번 달 끝 이후의 빈 칸
+              // 이번 달 종료 이후의 빈 칸
             } else {
               const link = document.createElement('a');
               link.textContent = date;
@@ -156,9 +69,11 @@
         }
       }
 
-      // 초기 캘린더 표시
+      // 초기 달력 표시
       const today = new Date();
       currentYear = today.getFullYear();
       currentMonth = today.getMonth() + 1;
       updateCalendar(currentYear, currentMonth);
     </script>
+  </body>
+</html>

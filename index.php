@@ -117,7 +117,7 @@
         <span class="unit">세트</span>
       </div>
       <div class="form-group">
-        <button type="submit">저장</button>
+        <button type="submit" class="my-button">저장</button>
       </div>
     </form>
     <hr>
@@ -127,6 +127,14 @@
 	  include "./include/db_connect.php";
     $sql = "select * from workout_records where date='$date'";	  
 	  $result = mysqli_query($con, $sql);			// SQL 명령 실행
+    // 데이터 가져오기 버튼을 눌렀을 때의 로직
+    if (isset($_POST['get_data'])) {
+    // 선택한 날짜를 가져옴
+    $selectedDate = $_POST['selected_date'];
+
+    // 선택한 날짜를 이용하여 데이터를 가져오는 SQL 쿼리 작성
+    $sql = "SELECT * FROM workout_records WHERE date = '$selectedDate'";
+    $result = mysqli_query($con, $sql);}
     $id = null;
     // check if any exercises were found
     if (mysqli_num_rows($result) > 0) {
@@ -141,8 +149,8 @@
         echo "<td><input type='text' name='weight[]' value='" . $row['weight'] . "'></td>";
         echo "<td><input type='text' name='reps[]' value='" . $row['reps'] . "'></td>";
         echo "<td><input type='text' name='sets[]' value='" . $row['sets'] . "'></td>";
-        echo "<td><input type='submit' name='modify' value='수정'></td>";
-        echo "<td><button type='button' onclick=\"location.href='cal_delete.php?id=" . $row['id'] . "&date=".$date. "'\">삭제</button></td>";
+        echo "<td><input type='submit' class=\"my-button\" name='modify' value='수정'></td>";
+        echo "<td><button type='button' class=\"my-button\" onclick=\"location.href='cal_delete.php?id=" . $row['id'] . "&date=".$date. "'\">삭제</button></td>";
         $id = $row['id'];
         echo "</tr>";
       }
@@ -154,6 +162,9 @@
     } else {
       echo "<p>아직 추가한 운동이 없습니다.</p>";
     }
+    
+    echo "<button type='button' class=\"my-button\" onclick=\"location.href='cal_datecopy.php'\">데이터 가져오기</button>";
+    // echo "<button type='button' class=\"my-button\" onclick=\"openCalendar()\">데이터 가져오기</button>";
     mysqli_close($con);?>
 </body>
 </html>

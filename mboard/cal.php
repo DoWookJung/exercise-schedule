@@ -83,6 +83,8 @@
     <div id="calendar-container">
       <div id="calendar">
       <h1 id="dateDisplay"></h1>
+      <button id="nextMonth">다음 달</button>
+      <button id="prevMonth">이전 달</button>
       <table>
         <thead>
           <tr>
@@ -104,11 +106,13 @@
       const calendarBody = document.querySelector('#calendar tbody');
       let currentYear;
       let currentMonth;
+      // 운동 기록 데이터 객체
+      const exerciseLogData = {};
 
       function updateCalendar(year, month) {
         const today = new Date();
-        currentYear = today.getFullYear();
-        currentMonth = today.getMonth() + 1;
+        currentYear = year; 
+        currentMonth = month; 
 
         const firstDay = new Date(`${year}-${month}-01`);
         const lastDay = new Date(year, month, 0);
@@ -131,6 +135,20 @@
               const link = document.createElement('a');
               link.textContent = date;
               link.href = `../index.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
+
+              // 링크 요소에 드래그 앤 드롭 이벤트 리스너 추가
+              link.addEventListener('dragstart', handleDragStart);
+              link.addEventListener('dragover', handleDragOver);
+              link.addEventListener('drop', handleDrop);
+              link.draggable = true;
+
+              // 현재 날짜에 대한 운동 기록 데이터가 있는지 확인합니다.
+              if (exerciseLogData[`${year}-${month}-${date}`]) {
+               // 운동 기록 데이터의 복사본을 생성하여 데이터 속성으로 추가합니다.
+                const logData = exerciseLogData[`${year}-${month}-${date}`];
+                link.dataset.exerciseLog = JSON.stringify(logData);
+              }
+
               cell.appendChild(link);
               if (year === currentYear && month === currentMonth && date === today.getDate()) {
                 // 오늘 날짜 표시
@@ -143,6 +161,77 @@
           calendarBody.appendChild(row);
         }
       }
+    // 이전 달로 이동
+    document.querySelector('#prevMonth').addEventListener('click', () => {
+      currentMonth--;
+      if (currentMonth < 1) {
+        currentYear--;
+        currentMonth = 12;
+      }
+      updateCalendar(currentYear, currentMonth);
+    });
+
+    // 다음 달로 이동
+    document.querySelector('#nextMonth').addEventListener('click', () => {
+    currentMonth++;
+    if (currentMonth > 12) {
+      currentYear++;
+      currentMonth = 1;
+    }
+    updateCalendar(currentYear, currentMonth);
+  });
+  // 드래그 앤 드롭 이벤트 핸들러
+  function handleDragStart(event) {
+    const date = new Date(currentYear, currentMonth - 1, parseInt(event.target.textContent) + 1);
+    const formattedDate = date.toISOString().slice(0, 10);
+    event.dataTransfer.setData('text/plain', formattedDate);
+    event.dataTransfer.setData('application/json', event.target.dataset.exerciseLog);
+  }
+
+    function handleDragOver(event) {
+      event.preventDefault();
+    }
+    function handleDrop(event) {
+      event.preventDefault();
+      const sourceDate = event.dataTransfer.getData('text/plain');
+      
+      // 대상 링크의 href 속성에서 전체 날짜를 가져옵니다.
+      const targetLink = event.target;
+      const targetDate = decodeURIComponent(targetLink.href.split('?date=')[1]);
+
+      // sourceDate에서 targetDate로 운동 기록 복사
+      copyExerciseRecords(sourceDate, targetDate);
+    }
+    function copyExerciseRecords(sourceDate, targetDate) {
+      // 운동 기록 복사를 위한 PHP 스크립트로 AJAX 요청 보내기
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'copy_exercise_records.php');
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          // 응답 처리
+          const response = JSON.parse(xhr.responseText);
+          if (response.success) {
+            // 운동 기록 복사 성공 처리
+            // 캘린더 표시 업데이트 또는 필요한 작업 수행
+          } else {
+            // 오류 처리
+            console.error(response.message);
+          }
+        } else {
+          // 오류 처리
+          console.error('AJAX 요청 중 오류가 발생했습니다.');
+        }
+      };
+
+      xhr.onerror = function() {
+        // 오류 처리
+        console.error('AJAX 요청 중 오류가 발생했습니다.');
+      };
+
+      xhr.send(`sourceDate=${encodeURIComponent(sourceDate)}&targetDate=${encodeURIComponent(targetDate)}`);
+    }
 
       // 초기 달력 표시
       const today = new Date();

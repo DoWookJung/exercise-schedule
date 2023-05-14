@@ -1,13 +1,90 @@
+<?php
+    session_start();
+
+    if (isset($_SESSION["userid"]))
+        $userid = $_SESSION["userid"];
+    else {
+        $userid = "";
+    }
+
+    if (isset($_SESSION["username"]))
+        $username = $_SESSION["username"];
+    else
+        $username = "";
+
+	if (!$userid) {
+		echo "
+				<script>
+				alert('로그인 후 이용해 주세요!');
+				history.go(-1)
+				</script>
+		";
+		exit;
+	}
+  ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8">
     <title>달력</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+      /* 앱바 스타일 */
+      .appbar {
+        background-color: #f9f9f9;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .appbar-title {
+        font-size: 24px;
+        margin-right: 20px;
+      }
+
+      .appbar-menu {
+        margin-left: auto;
+      }
+
+      .appbar-menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+      }
+      .appbar-menu li {
+        margin-left: 20px;
+      }
+      /* 캘린더 스타일 */
+      #calendar-container {
+        display: flex;
+        flex-direction: row;
+      }
+      #calendar {
+        flex: 1;
+        padding: 20px;
+      }
+    </style>
   </head>
   <body>
-    <div id="calendar">
+    <!-- 앱바 추가 -->
+    <div class="appbar">
+      <h1 class="appbar-title">운동 캘린더</h1>
+      <div class="appbar-menu">
+        <ul>
+          <li><a href="../main/index.php">메인</a></li>
+          <li><a href="../diet/diet_cal.php">식단일지</a></li>
+          <li><a href="../member/logout.php">로그아웃</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="calendar-container">
+      <div id="calendar">
       <h1 id="dateDisplay"></h1>
+      <button id="nextMonth">다음 달</button>
+      <button id="prevMonth">이전 달</button>
       <table>
         <thead>
           <tr>
@@ -21,65 +98,7 @@
           </tr>
         </thead>
         <tbody>
-          <?php
-          // Sample exercise data for demonstration
-          $exerciseData = [
-              '2023-05-10' => '런닝',
-              '2023-05-12' => '요가',
-              '2023-05-15' => '웨이트리프팅',
-          ];
-
-          function displayExercise($date) {
-              global $exerciseData;
-
-              if (isset($exerciseData[$date])) {
-                  echo '<div class="exercise">' . htmlspecialchars($exerciseData[$date]) . '</div>';
-              }
-          }
-
-          // Get the current year and month
-          $currentYear = date('Y');
-          $currentMonth = date('m');
-
-          // Get the number of days in the current month
-          $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $currentMonth, $currentYear);
-
-          // Display the calendar
-          $date = new DateTime($currentYear . '-' . $currentMonth . '-01');
-
-          // Adjust the starting day of the week if needed (e.g., Monday as the first day)
-          $startDayOfWeek = $date->format('N');
-          if ($startDayOfWeek > 1) {
-              echo '<tr>';
-              for ($i = 1; $i < $startDayOfWeek; $i++) {
-                  echo '<td></td>';
-              }
-          }
-
-          // Iterate through the days of the month
-          for ($day = 1; $day <= $daysInMonth; $day++) {
-              // Format the date in 'Y-m-d' format
-              $formattedDate = $date->format('Y-m-d');
-
-              echo '<td>';
-              echo '<div class="day">' . $day . '</div>';
-              displayExercise($formattedDate); // Display exercise data for the current date
-              echo '</td>';
-
-              // Move to the next day
-              $date->modify('+1 day');
-
-              // Start a new row if it's the end of the week
-              if ($date->format('N') == 1) {
-                  echo '</tr>';
-              }
-          }
-
-          // Complete the last row if it's not already closed
-          if ($date->format('N') != 1) {
-              echo '</tr>';
-          }
-          ?>
+          <!-- 여기에 동적으로 날짜 데이터를 추가할 예정입니다. -->
         </tbody>
       </table>
     </div>
@@ -90,8 +109,8 @@
 
       function updateCalendar(year, month) {
         const today = new Date();
-        currentYear = today.getFullYear();
-        currentMonth = today.getMonth() + 1;
+        currentYear = year; // Update currentYear
+        currentMonth = month; // Update currentMonth
 
         const firstDay = new Date(`${year}-${month}-01`);
         const lastDay = new Date(year, month, 0);
@@ -103,36 +122,48 @@
 
         let date = 1;
         for (let i = 0; i < 6; i++) {
-            const row = document.createElement('tr');
-            for (let j = 0; j < 7; j++) {
+          const row = document.createElement('tr');
+          for (let j = 0; j < 7; j++) {
             const cell = document.createElement('td');
             if (i === 0 && j < firstDay.getDay()) {
-                // 이번 달 시작 이전의 빈 칸
+              // 이번 달 시작 이전의 빈 칸
             } else if (date > lastDay.getDate()) {
-                // 이번 달 종료 이후의 빈 칸
+              // 이번 달 종료 이후의 빈 칸
             } else {
-                const dateDiv = document.createElement('div');
-                dateDiv.textContent = date;
-                cell.appendChild(dateDiv);
-
-                const exerciseDiv = document.createElement('div');
-                const formattedDate = `${year}-${('0' + month).slice(-2)}-${('0' + date).slice(-2)}`;
-                displayExercise(formattedDate);
-                exerciseDiv.innerHTML = document.querySelector('.exercise') ? document.querySelector('.exercise').innerHTML : '';
-                cell.appendChild(exerciseDiv);
-
-                if (year === currentYear && month === currentMonth && date === today.getDate()) {
+              const link = document.createElement('a');
+              link.textContent = date;
+              link.href = `../index.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
+              cell.appendChild(link);
+              if (year === currentYear && month === currentMonth && date === today.getDate()) {
                 // 오늘 날짜 표시
                 cell.classList.add('today');
-                }
-                date++;
+              }
+              date++;
             }
             row.appendChild(cell);
-            }
-            calendarBody.appendChild(row);
+          }
+          calendarBody.appendChild(row);
         }
-        }
+      }
+    // 이전 달로 이동
+    document.querySelector('#prevMonth').addEventListener('click', () => {
+      currentMonth--;
+      if (currentMonth < 1) {
+        currentYear--;
+        currentMonth = 12;
+      }
+      updateCalendar(currentYear, currentMonth);
+    });
 
+    // 다음 달로 이동
+    document.querySelector('#nextMonth').addEventListener('click', () => {
+    currentMonth++;
+    if (currentMonth > 12) {
+      currentYear++;
+      currentMonth = 1;
+    }
+    updateCalendar(currentYear, currentMonth);
+  });
 
       // 초기 달력 표시
       const today = new Date();

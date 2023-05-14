@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Date Selection</title>
+    <title>캘린더</title>
     <style>
         .calendar {
             width: 300px;
@@ -25,7 +25,7 @@
 <body>
     <div class="calendar">
         <table>
-            <caption>Select a Date</caption>
+            <caption>캘린더</caption>
             <tr>
                 <th colspan="7">
                     <button id="closeButton">닫기</button>
@@ -33,12 +33,12 @@
             </tr>
             <tr>
                 <th>일</th>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Thu</th>
-                <th>Fri</th>
-                <th>Sat</th>
+                <th>월</th>
+                <th>화</th>
+                <th>수</th>
+                <th>목</th>
+                <th>금</th>
+                <th>토</th>
             </tr>
             <?php
                 // 닫기 버튼을 누르면 이전 날짜로 돌아갈 수 있도록 코드 짜야함
@@ -83,7 +83,7 @@
                     // 현재 연도와 월에 해당하는 날짜인지 확인
                     if (checkdate($month, $i, $year)) {
                         $currentDate = sprintf("%04d-%02d-%02d", $year, $month, $i);
-                        
+
                         // 선택한 날짜인 경우 스타일 적용
                         $selected = "";
                         if ($currentDate === $selectedDate) {
@@ -102,25 +102,27 @@
                         echo "</tr><tr>";
                     }
                 }
-                ?>
+            ?>
 
-                <script>
-                    // 선택한 날짜를 부모 창으로 전달하는 함수
-                    function selectDate(date) {
-                        window.opener.postMessage(date, "*");
-                        window.close();
-                    }
+            <script>
+                // 선택한 날짜를 부모 창으로 전달하는 함수
+                function selectDate(date) {
+                    window.opener.postMessage(date, "*");
+                    window.close();
+                }
 
+                const closeButton = document.getElementById('closeButton');
+                closeButton.addEventListener('click', function() {
+                    const selectedDate = "<?php echo $selectedDate; ?>"; // Get the previously selected date from PHP variable
 
-                    const closeButton = document.getElementById('closeButton');
-                    closeButton.addEventListener('click', function() {
-                        const url = `./index.php?date=${encodeURIComponent(T_date)}`;
-                        window.location.href = './index.php';
-                    });
-
-                </script>
+                    const url = `./index.php?date=${encodeURIComponent(selectedDate)}`;
+                    window.location.href = url;
+                });
+            </script>
         </table>
     </div>
 </body>
+</html>
+
 </html>
 

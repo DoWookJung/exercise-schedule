@@ -1,4 +1,3 @@
-<?php session_start(); ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -125,13 +124,8 @@
     <h2>저장한 운동 기록</h2>
     
     <?php
-    if (isset($_SESSION["username"]))
-    $username = $_SESSION["username"];
-    else
-    $username = "";
-
 	  include "./include/db_connect.php";
-    $sql = "select * from workout_records where date='$date' && name = '$username'";	  
+    $sql = "select * from workout_records where date='$date'";	  
 	  $result = mysqli_query($con, $sql);			// SQL 명령 실행
     // 데이터 가져오기 버튼을 눌렀을 때의 로직
     if (isset($_POST['get_data'])) {
@@ -139,7 +133,7 @@
     $selectedDate = $_POST['selected_date'];
 
     // 선택한 날짜를 이용하여 데이터를 가져오는 SQL 쿼리 작성
-    $sql = "SELECT * FROM workout_records WHERE date = '$selectedDate' && name = '$username'";
+    $sql = "SELECT * FROM workout_records WHERE date = '$selectedDate'";
     $result = mysqli_query($con, $sql);}
     $id = null;
     // check if any exercises were found
@@ -169,7 +163,7 @@
       echo "<p>아직 추가한 운동이 없습니다.</p>";
     }
     
-    echo "<button type='button' class=\"my-button\" onclick=\"location.href='cal_datecopy.php?date=".$date."'\">데이터 가져오기</button>";
+    echo "<button type='button' class=\"my-button\" onclick=\"location.href='cal_datecopy.php'\">데이터 가져오기</button>";
     // echo "<button type='button' class=\"my-button\" onclick=\"openCalendar()\">데이터 가져오기</button>";
     mysqli_close($con);?>
 </body>

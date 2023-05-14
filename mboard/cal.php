@@ -1,12 +1,87 @@
+<?php
+    session_start();
+
+    if (isset($_SESSION["userid"]))
+        $userid = $_SESSION["userid"];
+    else {
+        $userid = "";
+    }
+
+    if (isset($_SESSION["username"]))
+        $username = $_SESSION["username"];
+    else
+        $username = "";
+
+	if (!$userid) {
+		echo "
+				<script>
+				alert('로그인 후 이용해 주세요!');
+				history.go(-1)
+				</script>
+		";
+		exit;
+	}
+  ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8">
     <title>달력</title>
     <link rel="stylesheet" type="text/css" href="style.css">
+    <style>
+      /* 앱바 스타일 */
+      .appbar {
+        background-color: #f9f9f9;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .appbar-title {
+        font-size: 24px;
+        margin-right: 20px;
+      }
+
+      .appbar-menu {
+        margin-left: auto;
+      }
+
+      .appbar-menu ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+      }
+      .appbar-menu li {
+        margin-left: 20px;
+      }
+      /* 캘린더 스타일 */
+      #calendar-container {
+        display: flex;
+        flex-direction: row;
+      }
+      #calendar {
+        flex: 1;
+        padding: 20px;
+      }
+    </style>
   </head>
   <body>
-    <div id="calendar">
+    <!-- 앱바 추가 -->
+    <div class="appbar">
+      <h1 class="appbar-title">운동 캘린더</h1>
+      <div class="appbar-menu">
+        <ul>
+          <li><a href="../main/index.php">메인</a></li>
+          <li><a href="../diet/diet_cal.php">식단일지</a></li>
+          <li><a href="../member/logout.php">로그아웃</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="calendar-container">
+      <div id="calendar">
       <h1 id="dateDisplay"></h1>
       <table>
         <thead>

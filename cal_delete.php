@@ -1,8 +1,4 @@
 <?php
-    $exercise = $_POST['exercise'];
-    $weight = $_POST['weight'];
-    $reps = $_POST['reps'];
-    $sets = $_POST['sets'];
     $id = $_GET["id"];
     $date= $_GET["date"];
     

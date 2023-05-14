@@ -28,11 +28,11 @@
             <caption>Select a Date</caption>
             <tr>
                 <th colspan="7">
-                    <button onclick="closeCalendar()">Close</button>
+                    <button id="closeButton">닫기</button>
                 </th>
             </tr>
             <tr>
-                <th>Sun</th>
+                <th>일</th>
                 <th>Mon</th>
                 <th>Tue</th>
                 <th>Wed</th>
@@ -41,6 +41,9 @@
                 <th>Sat</th>
             </tr>
             <?php
+                // 닫기 버튼을 누르면 이전 날짜로 돌아갈 수 있도록 코드 짜야함
+                // $T_date= $_GET["date"]
+
                 // 오늘 날짜 계산
                 $today = date("Y-m-d");
                 // 선택된 날짜 초기화
@@ -108,10 +111,13 @@
                         window.close();
                     }
 
-                    // 부모 창에서 달력을 닫는 함수
-                    function closeCalendar() {
-                        window.close();
-                    }
+
+                    const closeButton = document.getElementById('closeButton');
+                    closeButton.addEventListener('click', function() {
+                        const url = `./index.php?date=${encodeURIComponent(T_date)}`;
+                        window.location.href = './index.php';
+                    });
+
                 </script>
         </table>
     </div>

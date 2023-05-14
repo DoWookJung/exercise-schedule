@@ -8,4 +8,6 @@ CREATE TABLE workout_records (
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-ALTER TABLE workouts MODIFY weight DECIMAL(5,1);
+ALTER TABLE workout_records MODIFY weight DECIMAL(5,1);
+ALTER TABLE workout_records ADD name  char(20) not null;
+

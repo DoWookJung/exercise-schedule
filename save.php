@@ -1,5 +1,11 @@
 <?php
+session_start();
 include "./include/db_connect.php";
+
+if (isset($_SESSION["username"])) 
+$username = $_SESSION["username"];
+else 
+$username = "";  
 
 // POST 데이터 가져오기
 $date = $_POST["date"];
@@ -9,7 +15,8 @@ $reps = $_POST["reps"];
 $sets = $_POST["sets"];
 
 // SQL 쿼리 작성
-$sql = "INSERT INTO workout_records (date, weight, exercise, reps, sets) VALUES ('$date', '$weight', '$exercise', '$reps', '$sets')";
+$sql = "INSERT INTO workout_records (date, weight, exercise, reps, sets, name) 
+        VALUES ('$date', '$weight', '$exercise', '$reps', '$sets', '$username')";
 
 // 쿼리 실행
 if (mysqli_query($con, $sql)) {

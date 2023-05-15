@@ -1,6 +1,6 @@
 <?php
 // 데이터베이스 접속 정보 설정
-include "./include/db_connect.php";
+include "../../include/db_connect.php";
 
 // GET 데이터 가져오기
 $date = $_GET["date"];

@@ -27,7 +27,7 @@
   <head>
     <meta charset="UTF-8">
     <title>달력</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="../style.css">
     <style>
       /* 앱바 스타일 */
       .appbar {
@@ -74,9 +74,9 @@
       <h1 class="appbar-title">운동 캘린더</h1>
       <div class="appbar-menu">
         <ul>
-          <li><a href="../main/index.php">메인</a></li>
-          <li><a href="../diet/diet_cal.php">식단일지</a></li>
-          <li><a href="../member/logout.php">로그아웃</a></li>
+          <li><a href="./main/index.php">메인</a></li>
+          <li><a href="../../diet/diet_cal.php">식단일지</a></li>
+          <li><a href="../../member/logout.php">로그아웃</a></li>
         </ul>
       </div>
     </div>
@@ -134,7 +134,7 @@
             } else {
               const link = document.createElement('a');
               link.textContent = date;
-              link.href = `../index.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
+              link.href = `./index.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
 
               // 링크 요소에 드래그 앤 드롭 이벤트 리스너 추가
               link.addEventListener('dragstart', handleDragStart);

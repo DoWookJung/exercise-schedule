@@ -75,7 +75,7 @@
       <div class="appbar-menu">
         <ul>
           <li><a href="../main/index.php">메인</a></li>
-          <li><a href="../mboard/cal.php">운동일지</a></li>
+          <li><a href="../mboard/cal/cal.php">운동일지</a></li>
           <li><a href="../member/logout.php">로그아웃</a></li>
         </ul>
       </div>
@@ -130,7 +130,7 @@
             } else {
               const link = document.createElement('a');
               link.textContent = date;
-              link.href = `../index.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
+              link.href = `../mboard/cal/index.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
               cell.appendChild(link);
               if (year === currentYear && month === currentMonth && date === today.getDate()) {
                 // 오늘 날짜 표시

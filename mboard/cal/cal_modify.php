@@ -7,7 +7,7 @@
     $reps = $_POST['reps'];
     $sets = $_POST['sets'];
 
-    include "./include/db_connect.php";
+    include "../../include/db_connect.php";
       // 레코드 변경
       for($i = 0; $i < count($id); $i++) {
         $sql = "update workout_records set exercise='" . $exercise[$i] . "', weight='" . $weight[$i] . 

@@ -1,5 +1,5 @@
 <?php
-include "../include/db_connect.php";
+include "../../include/db_connect.php";
 
 
 // 연결 상태 확인

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>운동일지</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" type="text/css" href="./mboard/style.css">
+  <link rel="stylesheet" type="text/css" href="../style.css">
   <style>
   input[type='text'] {
     text-align: center;
@@ -14,7 +14,7 @@
 <body>
   <div class="container">
     <h1>
-    <a href="./mboard/cal.php">운동 일지</a>
+    <a href="./cal.php">운동 일지</a>
     </h1>
     <form action="save.php" method="post">
       <div class="form-group">
@@ -124,7 +124,7 @@
     <h2>저장한 운동 기록</h2>
     
     <?php
-	  include "./include/db_connect.php";
+	  include "../../include/db_connect.php";
     $sql = "select * from workout_records where date='$date'";	  
 	  $result = mysqli_query($con, $sql);			// SQL 명령 실행
     // 데이터 가져오기 버튼을 눌렀을 때의 로직
@@ -151,6 +151,7 @@
         echo "<td><input type='text' name='sets[]' value='" . $row['sets'] . "'></td>";
         echo "<td><input type='submit' class=\"my-button\" name='modify' value='수정'></td>";
         echo "<td><button type='button' class=\"my-button\" onclick=\"location.href='cal_delete.php?id=" . $row['id'] . "&date=".$date. "'\">삭제</button></td>";
+        echo "<td><button type='button' class=\"my-button\" onclick=\"location.href='cal_delete.php?id=" . $row['id'] . "&date=".$date. "'\">볼륨</button></td>";
         $id = $row['id'];
         echo "</tr>";
       }
@@ -162,9 +163,7 @@
     } else {
       echo "<p>아직 추가한 운동이 없습니다.</p>";
     }
-    
-    echo "<button type='button' class=\"my-button\" onclick=\"location.href='cal_datecopy.php'\">데이터 가져오기</button>";
-    // echo "<button type='button' class=\"my-button\" onclick=\"openCalendar()\">데이터 가져오기</button>";
+
     mysqli_close($con);?>
 </body>
 </html>

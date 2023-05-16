@@ -145,13 +145,14 @@
       while($row = mysqli_fetch_assoc($result)) {
         echo "<tr>";
         echo "<input type='hidden' name='id[]' value='" . $row['id'] . "'>"; // id 값을 추가
-        echo "<td><input type='text' name='exercise[]' value='" . $row['exercise'] . "'></td>";
+        echo "<td><input type='text' name='exercise[]' value='" . htmlspecialchars($row['exercise']) . "'></td>";
         echo "<td><input type='text' name='weight[]' value='" . $row['weight'] . "'></td>";
         echo "<td><input type='text' name='reps[]' value='" . $row['reps'] . "'></td>";
         echo "<td><input type='text' name='sets[]' value='" . $row['sets'] . "'></td>";
         echo "<td><input type='submit' class=\"my-button\" name='modify' value='수정'></td>";
         echo "<td><button type='button' class=\"my-button\" onclick=\"location.href='cal_delete.php?id=" . $row['id'] . "&date=".$date. "'\">삭제</button></td>";
-        echo "<td><button type='button' class=\"my-button\" onclick=\"location.href='cal_delete.php?id=" . $row['id'] . "&date=".$date. "'\">볼륨</button></td>";
+        echo "<td><button type='button' class=\"my-button\" onclick=\"location.href='cal_graph.php?exercise=" . urlencode(urldecode($row['exercise'])) . "&date=" . urlencode(urldecode($date)) . "'\">볼륨</button></td>";
+
         $id = $row['id'];
         echo "</tr>";
       }

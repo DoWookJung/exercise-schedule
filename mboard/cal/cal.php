@@ -74,7 +74,7 @@
       <h1 class="appbar-title">운동 캘린더</h1>
       <div class="appbar-menu">
         <ul>
-          <li><a href="./main/index.php">메인</a></li>
+          <li><a href="../../main/index.php">메인</a></li>
           <li><a href="../../diet/diet_cal.php">식단일지</a></li>
           <li><a href="../../member/logout.php">로그아웃</a></li>
         </ul>
@@ -83,8 +83,8 @@
     <div id="calendar-container">
       <div id="calendar">
       <h1 id="dateDisplay"></h1>
-      <button id="nextMonth">다음 달</button>
       <button id="prevMonth">이전 달</button>
+      <button id="nextMonth">다음 달</button>
       <table>
         <thead>
           <tr>

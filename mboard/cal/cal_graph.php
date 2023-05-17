@@ -17,9 +17,14 @@ else
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
     <?php
     $exercise = $_GET["exercise"];
+    $T_date= $_GET["date"];
     $exercise = urldecode($exercise); // 인코딩된 문자열을 디코딩하여 공백으로 변환
     $exerciseData = array(); // 운동 데이터 배열 초기화
-    echo "<h1>$exercise</h1>";
+    echo"
+    <h1>
+    <a href='./index.php?date=$T_date'>$exercise</a>
+    </h1>";
+    // echo "<h1>$exercise</h1>";
     include "../../include/db_connect.php";
     $sql = "SELECT `date`, `exercise`, `reps`, `sets`, `weight` FROM `workout_records` WHERE `exercise`='$exercise' && name='$username'";
     $result = mysqli_query($con, $sql);     // SQL 명령 실행
@@ -82,7 +87,11 @@ else
                         series: [
                             {
                             data: seriesData, // 위에서 정의한 값 데이터
-                            type: this.value // 버튼의 value 데이터 ('line' or 'bar')
+                            type: this.value, // 버튼의 value 데이터 ('line' or 'bar')
+                            label: {
+                            show: true,
+                            formatter: '{c}'
+                                }
                             }
                         ]
                             };

@@ -19,8 +19,33 @@
 				history.go(-1)
 				</script>
 		";
-		exit;
-	}
+    exit;
+  }
+		include "../../include/db_connect.php";
+    $sql = "select * from workout_records";
+    $result = mysqli_query($con,$sql);
+    // 운동 기록 데이터를 저장할 연관 배열을 초기화합니다.
+    $exerciseLogData = array();
+    if ($result) {
+      // 운동 기록 데이터를 반복하여 가져옵니다.
+      while ($row = mysqli_fetch_assoc($result)) {
+          $date = $row['date']; // 날짜 필드를 가져옵니다.
+          $exerciseLogData[$date] = array(
+              "exercise" => $row['exercise'],
+              "sets" => $row['sets'],
+          );
+      }
+        mysqli_close($con);
+        // 데이터를 JavaScript로 전달하기 위해 JSON 형식으로 인코딩합니다.
+        $exerciseLogJSON = json_encode($exerciseLogData);
+    }
+    else {
+      // 쿼리 실행 오류 처리
+      echo "운동 기록 데이터를 가져오는 동안 오류가 발생했습니다.";
+      mysqli_close($con);
+      exit();
+    }
+	
   ?>
 <!DOCTYPE html>
 <html>
@@ -29,6 +54,19 @@
     <title>달력</title>
     <link rel="stylesheet" type="text/css" href="../style.css">
     <style>
+        /*동호*/
+      td a {
+        display: block;
+        text-decoration: none;
+        color: #333;
+        font-size: 14px;
+        line-height: 18px;
+        padding: 2px;
+      }
+      td a:hover {
+        text-decoration: underline;
+      }
+    
       /* 앱바 스타일 */
       .appbar {
         background-color: #f9f9f9;
@@ -106,13 +144,13 @@
       const calendarBody = document.querySelector('#calendar tbody');
       let currentYear;
       let currentMonth;
-      // 운동 기록 데이터 객체
-      const exerciseLogData = {};
 
       function updateCalendar(year, month) {
         const today = new Date();
         currentYear = year; 
         currentMonth = month; 
+        // 운동 기록 데이터를 JavaScript 변수에 할당합니다.
+        const exerciseLogData = <?php echo json_encode($exerciseLogData); ?>;
 
         const firstDay = new Date(`${year}-${month}-01`);
         const lastDay = new Date(year, month, 0);

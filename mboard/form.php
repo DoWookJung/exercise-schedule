@@ -22,7 +22,7 @@
 			<li>
 				<span class="col1">이름 : </span>
 				<span class="col2"><?=$username?> 				
-					<span class="is_html"><input type="checkbox" name="is_html" value="y"> HTML 쓰기</span>
+					<!-- <span class="is_html"><input type="checkbox" name="is_html" value="y"> HTML 쓰기</span> -->
 				</span>
 			</li>					
 	    	<li>

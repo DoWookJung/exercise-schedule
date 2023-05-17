@@ -14,6 +14,7 @@
 <body>
   <div class="container">
     <h1>
+    <img src = "dumbell.PNG" alt="dumbell" width="50" height="45"> <!--동호- 덤벨 이미지 추가-->
     <a href="./cal.php">운동 일지</a>
     </h1>
     <form action="save.php" method="post">
@@ -30,7 +31,7 @@
       </div>
       <div class="form-group">
         <label for="exercise_name">운동 종목</label>
-        <input type="search" name="exercise_name" id="exercise_name" list="exercise_list"><br><br>
+        <input type="search" name="exercise_name" id="exercise_name" list="exercise_list"><br>
 		<datalist id="exercise_list">
     <option value="-------하체--------">
 			<option value="스쿼트">
@@ -103,18 +104,18 @@
       <div class="form-group">
         <label for="weight">중량</label>
         <input type="search" id="weight" name="weight" min="0" step="0.1" required>
-        <span class="unit">kg</span>
+        <span class="unit"></span>
       </div>
 
       <div class="form-group">
         <label for="reps">횟수</label>
         <input type="number" id="reps" name="reps" min="0" required>
-        <span class="unit">회</span>
+        <span class="unit"></span>
       </div>
       <div class="form-group">
         <label for="sets">세트수</label>
         <input type="number" id="sets" name="sets" min="0" required>
-        <span class="unit">세트</span>
+        <span class="unit"></span>
       </div>
       <div class="form-group">
         <button type="submit" class="my-button">저장</button>

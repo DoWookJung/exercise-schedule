@@ -54,22 +54,9 @@
     <title>달력</title>
     <link rel="stylesheet" type="text/css" href="../style.css">
     <style>
-        /*동호*/
-      td a {
-        display: block;
-        text-decoration: none;
-        color: #333;
-        font-size: 14px;
-        line-height: 18px;
-        padding: 2px;
-      }
-      td a:hover {
-        text-decoration: underline;
-      }
-    
-      /* 앱바 스타일 */
+         /* 앱바 스타일 */
       .appbar {
-        background-color: #f9f9f9;
+        background-color: #6cdaee; /*동호-상단 색상 변경*/
         height: 60px;
         display: flex;
         align-items: center;
@@ -80,6 +67,7 @@
       .appbar-title {
         font-size: 24px;
         margin-right: 20px;
+        
       }
 
       .appbar-menu {
@@ -87,7 +75,7 @@
       }
 
       .appbar-menu ul {
-        list-style: none;
+        list-style: $_COOKIE;
         padding: 0;
         margin: 0;
         display: flex;
@@ -101,7 +89,7 @@
         flex-direction: row;
       }
       #calendar {
-        flex: 1;
+        flex: 5;
         padding: 20px;
       }
     </style>
@@ -120,9 +108,11 @@
     </div>
     <div id="calendar-container">
       <div id="calendar">
+      <div id="dateNav">
+      <button id="prevMonth">&lt; </button> <!--이전달, 다음달 대신 <,>으로 변경-->
       <h1 id="dateDisplay"></h1>
-      <button id="prevMonth">이전 달</button>
-      <button id="nextMonth">다음 달</button>
+      <button id="nextMonth">&gt; </button>
+      </div>
       <table>
         <thead>
           <tr>

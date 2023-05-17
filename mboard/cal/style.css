@@ -1,65 +1,84 @@
 /* Reset styles */
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
-    padding: 1rem;
-  }
-  
-  h1 {
-    margin-bottom: 1rem;
-  }
-  
-  form {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 1rem;
-    margin-bottom: 1rem;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 0.5rem;
-  }
-  
-  input[type="text"] {
-    text-align: center;
-  }
-  
-  table {
-    border-collapse: collapse;
-    margin-bottom: 1rem;
-  }
-  
-  table th,
-  table td {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-  }
-  
-  table th {
-    background-color: #f0f0f0;
-    font-weight: normal;
-  }
-  
-  table td:last-child {
-    text-align: right;
-  }
-  .my-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .my-button:hover {
-    background-color: #0056b3;
-  }
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 3px; /*동호-입력 칸마다 약간 띄움*/
+  font-family: 'Gowun Batang', serif;
+
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  padding: 5rem;
+}
+
+h1 {
+  margin-bottom: 1rem;
+}
+h2{ /*저장한 운동기록 위치 수정*/
+  text-align: center;
+}
+
+form {
+  background-color: #fff;
+  border: 1px solid #cccccc;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  text-align: center; /*동호-중앙으로 정렬*/
+  width: 85%;         
+  height: 85%;        
+  margin:0 auto;    /*동호-운동 입력하는 칸 크기 줄이고 가운데로 정렬*/
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input[type="text"] {
+  text-align: center;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  background-color: #f0f0f0;
+}
+
+table th,
+table td {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+table th {
+  background-color: #f0f0f0;
+  font-weight: normal;
+}
+
+table td:last-child {
+  text-align: right;
+}
+.my-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  display: inline-block; /* 텍스트를 수평으로 정렬하기 위해 인라인 블록 요소로 설정 */
+  line-height: normal; /* 수직 정렬 제거 */
+  text-align: center; /* 텍스트를 가운데로 정렬 */
+  vertical-align: middle; /* 텍스트를 수직으로 중앙 정렬 */
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+}
+
+.my-button:hover {
+  background-color: #0056b3;
+}

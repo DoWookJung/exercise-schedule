@@ -1,14 +1,19 @@
+* {
+  font-family: 'Gowun Batang', serif;
+  }
   h1 {
     text-align: center;
   }
   
   table {
-    border-collapse: collapse;
-    width: 100%;
+    border-collapse: collapse; /*동호-달력 크기 줄이고 페이지 가운데 오도록 배치*/
+    margin:0 auto;
+    width: 50%;
+    height: 80%;
   }
   
   th, td {
-    border: 1px solid #ccc;
+    border: 1px solid #000000; /*동호-달력 검은 테두리 색칠*/
     text-align: center;
     padding: 10px;
   }
@@ -19,26 +24,70 @@
   }
   
   td {
-    height: 50px;
+    vertical-align: top; /*동호-달력의 숫자 왼쪽위로 정렬, 달력 칸 크기 키움*/
+    text-align: left; 
+    height: 100px;
+  }
+
+  td {
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+    position: relative;
   }
   
+  td a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: #333;
+    position: relative;
+    z-index: 1;
+  }
+  
+  td a:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background-color: #ccc;
+    border-radius: 50%;
+    z-index: -1;
+  }
+  
+  td a:hover:before {
+    background-color: #6cdaee;
+  }
+  
+
   .today {
     background-color: yellow;
   }
   
   #dateDisplay {
-    font-size: 24px;
+    font-size: 30px; /*동호-xxxx년 x월 글자크키 키움*/
     margin-bottom: 10px;
+    vertical-align: middle;
   }
-  /*동호*/
-  td a {
-    display: block;
-    text-decoration: none;
-    color: #333;
-    font-size: 14px;
-    line-height: 18px;
-    padding: 2px;
+  #dateNav {        /*동호-xxxx년 x월 양옆에 <,> 배치*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
   }
-  td a:hover {
-    text-decoration: underline;
-  }
+  
+  #prevMonth,       /*동호- <,> 크기조절 및 가운데 정렬*/
+  #nextMonth {
+    font-size: 30px;
+    margin: 0 30px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    vertical-align: middle;
+    }

@@ -162,7 +162,7 @@
             } else {
               const link = document.createElement('a');
               link.textContent = date;
-              link.href = `./index.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
+              link.href = `./diet_main.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
 
               // 링크 요소에 드래그 앤 드롭 이벤트 리스너 추가
               link.addEventListener('dragstart', handleDragStart);

@@ -22,6 +22,7 @@
     exit;
   }
 		include "../../include/db_connect.php";
+
     $sql = "select * from workout_records";
     $result = mysqli_query($con,$sql);
     // 운동 기록 데이터를 저장할 연관 배열을 초기화합니다.
@@ -35,16 +36,13 @@
               "sets" => $row['sets'],
           );
       }
-        mysqli_close($con);
-        // 데이터를 JavaScript로 전달하기 위해 JSON 형식으로 인코딩합니다.
-        $exerciseLogJSON = json_encode($exerciseLogData);
-    }
-    else {
+    } else {
       // 쿼리 실행 오류 처리
       echo "운동 기록 데이터를 가져오는 동안 오류가 발생했습니다.";
       mysqli_close($con);
       exit();
-    }
+  }
+  mysqli_close($con);
 	
   ?>
 <!DOCTYPE html>
@@ -172,9 +170,15 @@
 
               // 현재 날짜에 대한 운동 기록 데이터가 있는지 확인합니다.
               if (exerciseLogData[`${year}-${month}-${date}`]) {
-               // 운동 기록 데이터의 복사본을 생성하여 데이터 속성으로 추가합니다.
-                const logData = exerciseLogData[`${year}-${month}-${date}`];
-                link.dataset.exerciseLog = JSON.stringify(logData);
+                  // 운동 기록 데이터의 복사본을 생성하여 데이터 속성으로 추가합니다.
+                  const logData = exerciseLogData[`${year}-${month}-${date}`];
+                  link.dataset.exerciseLog = JSON.stringify(logData);
+
+                  // 운동 데이터를 표시하는 부분을 추가합니다.
+                  const exerciseInfo = document.createElement('div');
+                  exerciseInfo.classList.add('exercise-info');
+                  exerciseInfo.textContent = logData.exercise; // 운동 종류
+                  link.appendChild(exerciseInfo);
               }
 
               cell.appendChild(link);

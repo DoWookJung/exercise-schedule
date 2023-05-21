@@ -1,0 +1,9 @@
+CREATE TABLE diet_log (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  date DATE NOT NULL,
+  meal VARCHAR(255) NOT NULL,
+  food_name VARCHAR(255) NOT NULL,
+  amount INT NOT NULL,
+  calories INT NOT NULL
+);

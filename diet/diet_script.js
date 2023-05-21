@@ -1,6 +1,7 @@
+    var sizeInput;
     function fillFoodDetails() {
         var foodName = document.getElementById("food_name").value;
-        var sizeInput = document.getElementById("size");
+        sizeInput = document.getElementById("size");
         var calorieInput = document.getElementById("calorie");
 
         // 여기서 Ajax 요청을 보내고 응답을 받아와서 원하는 값으로 채워줍니다

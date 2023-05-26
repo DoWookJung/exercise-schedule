@@ -21,7 +21,19 @@
     <meta charset="UTF-8">
     <title>식단일지</title>
     <link rel="stylesheet" type="text/css" href="../mboard/style.css">
+    <link rel="stylesheet" type="text/css" href="../mboard/cal/style.css">
     <script src="diet_script.js"></script>
+    <style>
+    td {
+        vertical-align: top; /*달력의 숫자 왼쪽위로 정렬, 달력 칸 크기 키움*/
+        text-align: left; 
+        width: 40px;
+        height: 40px;
+        /* vertical-align: middle; */
+        border: 1px solid #ccc;
+        position: relative;
+      }
+    </style>
   </head>
     <body>
     <form action="diet_save.php" method="post">
@@ -73,7 +85,7 @@
         <br>
         <label for="calorie">칼로리</label>
         <input type="text" name="calorie" id="calorie" />
-        
+        <br>
         <button type="submit" class="my-button">저장</button>
     </form>
     <hr>
@@ -114,12 +126,12 @@
         echo "<td><input type='text' name='amount[]' value='" . $row['amount'] . "'></td>";
         echo "<td><input type='text' name='calories[]' value='" . $row['calories'] . "'></td>";
         echo "<td><input type='submit' class=\"my-button\" name='modify' value='수정'></td>";
-        echo "<td><button type='button' class=\"my-button\" onclick=\"location.href='diet_delete.php?id=" . $row['id'] . "&date=".$date. "'\">삭제</button></td>";
+        echo "<td><button type='button' class=\"my-button\" onclick=\"location.href='diet_delete.php?id=" . $row['id'] . "&date=" . $date . "&meal=" . $row['meal'] . "'\">삭제</button></td>";
         // echo "<td><button type='button' class=\"my-button\" onclick=\"location.href='cal_graph.php?exercise=" . urlencode(urldecode($row['exercise'])) . "&date=" . urlencode(urldecode($date)) . "'\">볼륨</button></td>";
         $totalCalories += $row['calories']; 
         echo "</tr>";
     }
-    echo "<tr><th colspan='3' style='text-align: right;'>총 칼로리:</th><th>$totalCalories</th></tr>";
+    echo " <tr><th colspan='3' style='text-align: right;'>총 칼로리:</th><th><strong>$totalCalories</strong></th></tr>";
     echo "</table>";
     echo "</form>";
     } else {

@@ -21,31 +21,35 @@
 		";
     exit;
   }
-		include "../include/db_connect.php";
-    $sql = "select * from workout_records";
-    $result = mysqli_query($con,$sql);
-    // 운동 기록 데이터를 저장할 연관 배열을 초기화합니다.
-    $exerciseLogData = array();
+
+    $dietLogData = array();
+    include "../include/db_connect.php";
+    // 데이터베이스에서 운동 기록 데이터 가져오기
+    $query = "SELECT * FROM diet_log WHERE name = '$username'";
+    $result = mysqli_query($con, $query);
+    $totalCalories = 0;
     if ($result) {
-      // 운동 기록 데이터를 반복하여 가져옵니다.
-      while ($row = mysqli_fetch_assoc($result)) {
-          $date = $row['date']; // 날짜 필드를 가져옵니다.
-          $exerciseLogData[$date] = array(
-              "exercise" => $row['exercise'],
-              "sets" => $row['sets'],
-          );
-      }
-        mysqli_close($con);
-        // 데이터를 JavaScript로 전달하기 위해 JSON 형식으로 인코딩합니다.
-        $exerciseLogJSON = json_encode($exerciseLogData);
+          while ($row = mysqli_fetch_assoc($result)) {
+            $date = $row['date'];
+            $calories = $row['calories'];
+            // $totalCalories += $row['calories'];
+        
+            // 이미 해당 날짜의 데이터가 있는지 확인
+            if (isset($dietLogData[$date])) {
+                // 이미 데이터가 있는 경우, 기존 데이터에 추가
+                $dietLogData[$date]['calories'] += $calories;
+            } else {
+                // 새로운 날짜의 데이터인 경우, 배열로 초기화
+                $dietLogData[$date] = array(
+                    'calories' => $calories
+                );
+            }
+        }
+      } else {
+        echo "운동 기록 데이터를 가져오는 중 오류가 발생했습니다: " . mysqli_error($con);
     }
-    else {
-      // 쿼리 실행 오류 처리
-      echo "운동 기록 데이터를 가져오는 동안 오류가 발생했습니다.";
-      mysqli_close($con);
-      exit();
-    }
-	
+    
+    mysqli_close($con);
   ?>
 <!DOCTYPE html>
 <html>
@@ -82,15 +86,6 @@
       }
       .appbar-menu li {
         margin-left: 20px;
-      }
-      /* 캘린더 스타일 */
-      #calendar-container {
-        display: flex;
-        flex-direction: row;
-      }
-      #calendar {
-        flex: 5;
-        padding: 20px;
       }
     </style>
   </head>
@@ -136,11 +131,11 @@
       let currentMonth;
 
       function updateCalendar(year, month) {
-        const today = new Date();
+        const currentDate = new Date();
         currentYear = year; 
         currentMonth = month; 
-        // 운동 기록 데이터를 JavaScript 변수에 할당합니다.
-        const exerciseLogData = <?php echo json_encode($exerciseLogData); ?>;
+        // 식단 기록 데이터를 JavaScript 변수에 할당합니다.
+        const dietLogData = <?php echo json_encode($dietLogData); ?>;
 
         const firstDay = new Date(`${year}-${month}-01`);
         const lastDay = new Date(year, month, 0);
@@ -155,10 +150,45 @@
           const row = document.createElement('tr');
           for (let j = 0; j < 7; j++) {
             const cell = document.createElement('td');
+  
             if (i === 0 && j < firstDay.getDay()) {
               // 이번 달 시작 이전의 빈 칸
+              const prevMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+              const prevMonthLastDay = new Date(currentYear, prevMonth, 0).getDate();
+              const prevMonthDate = prevMonthLastDay - firstDay.getDay() + j + 1;
+              cell.textContent = prevMonthDate;
+              cell.classList.add('other-month');
+
+              const link = document.createElement('a');
+              link.textContent = date;
+              link.href = `./diet_main.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
+
+              // 링크 요소에 드래그 앤 드롭 이벤트 리스너 추가
+              link.addEventListener('dragstart', handleDragStart);
+              link.addEventListener('dragover', handleDragOver);
+              link.addEventListener('drop', handleDrop);
+              link.draggable = true;
+
+              cell.appendChild(link);
+              
             } else if (date > lastDay.getDate()) {
               // 이번 달 종료 이후의 빈 칸
+              const nextMonth = currentMonth === 12 ? 1 : currentMonth + 1;
+              const nextMonthDate = date - lastDay.getDate();
+              cell.textContent = nextMonthDate;
+              cell.classList.add('other-month');
+
+              const link = document.createElement('a');
+              link.textContent = date;
+              link.href = `./diet_main.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
+
+              // 링크 요소에 드래그 앤 드롭 이벤트 리스너 추가
+              link.addEventListener('dragstart', handleDragStart);
+              link.addEventListener('dragover', handleDragOver);
+              link.addEventListener('drop', handleDrop);
+              link.draggable = true;
+
+              cell.appendChild(link);
             } else {
               const link = document.createElement('a');
               link.textContent = date;
@@ -170,12 +200,25 @@
               link.addEventListener('drop', handleDrop);
               link.draggable = true;
 
-              // 현재 날짜에 대한 운동 기록 데이터가 있는지 확인합니다.
-              if (exerciseLogData[`${year}-${month}-${date}`]) {
-               // 운동 기록 데이터의 복사본을 생성하여 데이터 속성으로 추가합니다.
-                const logData = exerciseLogData[`${year}-${month}-${date}`];
-                link.dataset.exerciseLog = JSON.stringify(logData);
+              // 링크 요소에 데이터 설정
+              if (dietLogData[`${year}-${month}-${date}`]) {
+                const logData = dietLogData[`${year}-${month}-${date}`];
+                link.dataset.dietLog = JSON.stringify(logData);
+
+                // 이미 식단 데이터를 표시하는 요소가 있는지 확인합니다.
+                const existingDietInfo = link.querySelector('.diet-info');
+                if (existingDietInfo) {
+                  // 이미 있는 경우, 텍스트만 업데이트합니다.
+                  existingDietInfo.textContent = logData.calories + 'kcal';
+                } else {
+                  // 없는 경우, 새로운 요소를 생성하여 추가합니다.
+                  const dietInfo = document.createElement('div');
+                  dietInfo.classList.add('diet-info');
+                  dietInfo.textContent = logData.calories + 'kcal';
+                  link.appendChild(dietInfo);
+                }
               }
+
 
               cell.appendChild(link);
               if (year === currentYear && month === currentMonth && date === today.getDate()) {
@@ -188,7 +231,20 @@
           }
           calendarBody.appendChild(row);
         }
-      }
+        // dietLogData를 순회하며 식단 데이터를 캘린더에 추가합니다.
+        for (const [date, logData] of Object.entries(dietLogData)) {
+            const [logYear, logMonth, logDate] = date.split('-');
+            if (logYear == year && logMonth == month) {
+                const link = document.querySelector(`a[href$="${logYear}-${logMonth}-${logDate}"]`);
+                if (link) {
+                    const dietInfo = document.createElement('div');
+                    dietInfo.classList.add('diet-info');
+                    dietInfo.textContent = logData.calories + 'kcal';
+                    link.appendChild(dietInfo);
+                }
+              }
+          }
+        }
     // 이전 달로 이동
     document.querySelector('#prevMonth').addEventListener('click', () => {
       currentMonth--;
@@ -208,12 +264,29 @@
     }
     updateCalendar(currentYear, currentMonth);
   });
+  function copy(){
+    const link = document.createElement('a');
+    link.textContent = date;
+    link.href = `./diet_main.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
+
+    // 링크 요소에 드래그 앤 드롭 이벤트 리스너 추가
+    link.addEventListener('dragstart', handleDragStart);
+    link.addEventListener('dragover', handleDragOver);
+    link.addEventListener('drop', handleDrop);
+    link.draggable = true;
+  }
+
   // 드래그 앤 드롭 이벤트 핸들러
   function handleDragStart(event) {
-    const date = new Date(currentYear, currentMonth - 1, parseInt(event.target.textContent) + 1);
-    const formattedDate = date.toISOString().slice(0, 10);
+    const targetDate = decodeURIComponent(event.target.href.split('?date=')[1]);
+    const [year, month, day] = targetDate.split('-');
+
+    const date = new Date(year, month - 1, day);
+    date.setDate(date.getDate() + 1);
+    const formattedDate = date.toISOString().split('T')[0];
+
     event.dataTransfer.setData('text/plain', formattedDate);
-    event.dataTransfer.setData('application/json', event.target.dataset.exerciseLog);
+    event.dataTransfer.setData('application/json', event.target.dataset.dietLog);
   }
 
     function handleDragOver(event) {
@@ -227,31 +300,37 @@
       const targetLink = event.target;
       const targetDate = decodeURIComponent(targetLink.href.split('?date=')[1]);
 
-      // sourceDate에서 targetDate로 운동 기록 복사
-      copyExerciseRecords(sourceDate, targetDate);
+      // sourceDate에서 targetDate로 식단 기록 복사
+      copyDietRecords(sourceDate, targetDate);
     }
-    function copyExerciseRecords(sourceDate, targetDate) {
-      // 운동 기록 복사를 위한 PHP 스크립트로 AJAX 요청 보내기
+    function copyDietRecords(sourceDate, targetDate) {
+      // 식단 기록 복사를 위한 PHP 스크립트로 AJAX 요청 보내기
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', 'copy_exercise_records.php');
+      xhr.open('POST', 'copy_diet_records.php');
       xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
+      
       xhr.onload = function() {
         if (xhr.status === 200) {
           // 응답 처리
-          const response = JSON.parse(xhr.responseText);
-          if (response.success) {
-            // 운동 기록 복사 성공 처리
-            // 캘린더 표시 업데이트 또는 필요한 작업 수행
-          } else {
-            // 오류 처리
-            console.error(response.message);
+          try {
+            const responseText = xhr.responseText.replace(/<[^>]+>/g, '');
+            const response = JSON.parse(responseText);
+            if (response.success) {
+              // 식단 기록 복사 성공 처리
+              // 캘린더 표시 업데이트 또는 필요한 작업 수행
+            } else {
+              // 오류 처리
+              console.error(response.message);
+            }
+          } catch (error) {
+            console.error('유효하지 않은 JSON 형식입니다:', error);
           }
         } else {
           // 오류 처리
           console.error('AJAX 요청 중 오류가 발생했습니다.');
         }
       };
+
 
       xhr.onerror = function() {
         // 오류 처리

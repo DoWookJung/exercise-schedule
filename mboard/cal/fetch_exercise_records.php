@@ -1,4 +1,4 @@
-<?php
+<!-- <?php
 include "../../include/db_connect.php";
 
 
@@ -43,4 +43,4 @@ if (isset($_GET['date'])) {
     // 날짜 매개변수가 없는 경우 처리
     echo '잘못된 요청입니다. 날짜 매개변수가 없습니다.';
   }
-  ?>
+  ?> -->

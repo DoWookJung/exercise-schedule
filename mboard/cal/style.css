@@ -4,7 +4,15 @@
   margin: 0px;
   padding: 3px; /*동호-입력 칸마다 약간 띄움*/
   font-family: 'Gowun Batang', serif;
+}
+#calendar-container {
+  width: 300px; /* 원하는 너비 값으로 변경해보세요 */
+  margin: 0 auto;
+}
 
+#calendar {
+  width: 100%;
+  border-collapse: collapse;
 }
 
 body {
@@ -36,7 +44,7 @@ label {
   margin-bottom: 0.5rem;
 }
 
-input[type="text"] {
+input {
   text-align: center;
 }
 

@@ -6,8 +6,14 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" type="text/css" href="../style.css">
   <style>
-  input[type='text'] {
-    text-align: center;
+  td {
+    vertical-align: top; /*달력의 숫자 왼쪽위로 정렬, 달력 칸 크기 키움*/
+    text-align: left; 
+    width: 40px;
+    height: 40px;
+    /* vertical-align: middle; */
+    border: 1px solid #ccc;
+    position: relative;
   }
 </style>
 </head>

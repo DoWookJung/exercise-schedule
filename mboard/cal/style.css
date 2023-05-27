@@ -59,6 +59,15 @@ table td {
   padding: 0.5rem;
   border: 1px solid #ccc;
 }
+td {
+  vertical-align: top; /*달력의 숫자 왼쪽위로 정렬, 달력 칸 크기 키움*/
+  text-align: left; 
+  width: 40px;
+  height: 40px;
+  /* vertical-align: middle; */
+  border: 1px solid #ccc;
+  position: relative;
+}  
 
 table th {
   background-color: #f0f0f0;

@@ -24,6 +24,37 @@
     <link rel="stylesheet" type="text/css" href="../mboard/cal/style.css">
     <script src="diet_script.js"></script>
     <style>
+         /* 앱바 스타일 */
+      .appbar {
+        background-color: #6cdaee; /*동호-상단 색상 변경*/
+        height: 60px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .appbar-title {
+        font-size: 24px;
+        margin-right: 20px;
+        
+      }
+
+      .appbar-menu {
+        margin-left: auto;
+      }
+
+      .appbar-menu ul {
+        list-style: $_COOKIE;
+        padding: 0;
+        margin: 0;
+        display: flex;
+      }
+      .appbar-menu li {
+        margin-left: 20px;
+      }
+    </script>
+    <style>
     td {
         vertical-align: top; /*달력의 숫자 왼쪽위로 정렬, 달력 칸 크기 키움*/
         text-align: left; 
@@ -36,6 +67,18 @@
     </style>
   </head>
     <body>
+    <!-- 앱바 추가 -->
+    <div class="appbar">
+      <h1 class="appbar-title">식단 캘린더</h1>
+      <div class="appbar-menu">
+        <ul>
+          <li><a href="./diet_main.php">이전</a></li>
+          <li><a href="./diet_cal.php">식단일지</a></li>
+          <li><a href="../member/logout.php">로그아웃</a></li>
+        </ul>
+      </div>
+    </div>
+
     <form action="diet_save.php" method="post">
         <label for="date">날짜</label>
         <input type="date" id="date" name="date" value="<?php echo $date; ?>">
@@ -116,7 +159,7 @@
     echo "<form action='diet_modify.php' method='post'>";
     echo "<table>";
     echo "<input type='hidden' name='date' value='" . $date . "'>"; // date 값을 추가
-    echo "<tr><th>식사</th><th>음식 이름</th><th>용량</th><th>칼로리</th></th>";
+    echo "<tr><th>식사</th><th>음식 이름</th><th>용량</th><th>칼로리</th><th colspan='2'><button type='button' class=\"my-button\" onclick=\"location.href='diet_alldelete.php?date=$date&meal=$meal'\">전체삭제</button></th></th>";
     $totalCalories = 0;
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";
@@ -127,9 +170,8 @@
         echo "<td><input type='text' name='calories[]' value='" . $row['calories'] . "'></td>";
         echo "<td><input type='submit' class=\"my-button\" name='modify' value='수정'></td>";
         echo "<td><button type='button' class=\"my-button\" onclick=\"location.href='diet_delete.php?id=" . $row['id'] . "&date=" . $date . "&meal=" . $row['meal'] . "'\">삭제</button></td>";
-        // echo "<td><button type='button' class=\"my-button\" onclick=\"location.href='cal_graph.php?exercise=" . urlencode(urldecode($row['exercise'])) . "&date=" . urlencode(urldecode($date)) . "'\">볼륨</button></td>";
-        $totalCalories += $row['calories']; 
         echo "</tr>";
+        $totalCalories += $row['calories']; 
     }
     echo " <tr><th colspan='3' style='text-align: right;'>총 칼로리:</th><th><strong>$totalCalories</strong></th></tr>";
     echo "</table>";

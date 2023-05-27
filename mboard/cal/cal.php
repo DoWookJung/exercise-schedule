@@ -156,9 +156,82 @@ mysqli_close($con);
                 for (let j = 0; j < 7; j++) {
                     const cell = document.createElement('td');
                     if (i === 0 && j < firstDay.getDay()) {
-                        // 이번 달 시작 전의 빈 필드
+                    // 이번 달 시작 이전의 빈 칸
+                    const prevMonth = currentMonth === 1 ? 12 : currentMonth - 1;
+                    const prevMonthLastDay = new Date(currentYear, prevMonth, 0).getDate();
+                    const prevMonthDate = new Date(currentYear, prevMonth - 1, prevMonthLastDay - firstDay.getDay() + j + 1);
+                    cell.textContent = prevMonthDate.getDate();
+                    cell.classList.add('other-month');
+
+                    const link = document.createElement('a');
+                    link.href = `./index.php?date=${encodeURIComponent(prevMonthDate.getFullYear() + '-' + ('0' + (prevMonthDate.getMonth() + 1)).slice(-2) + '-' + ('0' + prevMonthDate.getDate()).slice(-2))}`;
+
+                    // 링크 요소에 드래그 앤 드롭 이벤트 리스너 추가
+                    link.addEventListener('dragstart', handleDragStart);
+                    link.addEventListener('dragover', handleDragOver);
+                    link.addEventListener('drop', handleDrop);
+                    link.draggable = true;
+
+                    cell.appendChild(link);
+
+                    // 링크 요소에 데이터 설정
+                    if (exerciseLogData.hasOwnProperty(date)) {
+                        const logData = exerciseLogData[`${year}-${month}-${date}`];
+                        link.dataset.exerciseLog = JSON.stringify(logData);
+
+                        // 이미 운동 데이터를 표시하는 요소가 있는지 확인합니다.
+                        const existingExerciseInfo = link.querySelector('.exercise-info');
+                        if (existingExerciseInfo) {
+                            // 이미 있는 경우, 텍스트만 업데이트합니다.
+                            existingExerciseInfo.textContent = logData.exercise;
+                        } else {
+                            // 없는 경우, 새로운 요소를 생성하여 추가합니다.
+                            const exerciseInfo = document.createElement('div');
+                            exerciseInfo.classList.add('exercise-info');
+                            exerciseInfo.textContent = logData.exercise;
+                            link.appendChild(exerciseInfo);
+                        }
+                    }
+
+                    cell.appendChild(link);
+
                     } else if (date > lastDay.getDate()) {
-                        // 이번 달 종료 후의 빈 필드
+                        // 다음 달 남는 빈 칸
+                        const nextMonth = (currentMonth + 1) % 12; // nextMonth 변수가 항상 1에서 12 사이의 값을 유지
+                        const nextMonthDate = new Date(currentYear, nextMonth - 1, date - lastDay.getDate());
+                        const nextMonthDay = nextMonthDate.getDate();
+                        cell.textContent = nextMonthDay;
+                        cell.classList.add('other-month');
+
+                        const link = document.createElement('a');
+                        link.href = `./index.php?date=${encodeURIComponent(nextMonthDate.getFullYear() + '-' + ('0' + (nextMonthDate.getMonth() + 1)).slice(-2) + '-' + ('0' + nextMonthDate.getDate()).slice(-2))}`;
+
+                        link.addEventListener('dragstart', handleDragStart);
+                        link.addEventListener('dragover', handleDragOver);
+                        link.addEventListener('drop', handleDrop);
+                        link.draggable = true;
+
+                        // 링크 요소에 데이터 설정
+                        if (exerciseLogData[`${year}-${month}-${date}`]) {
+                            const logData = exerciseLogData[`${year}-${month}-${date}`];
+                            link.dataset.exerciseLog = JSON.stringify(logData);
+
+                            // 이미 운동 데이터를 표시하는 요소가 있는지 확인합니다.
+                            const existingExerciseInfo = link.querySelector('.exercise-info');
+                            if (existingExerciseInfo) {
+                                // 이미 있는 경우, 텍스트만 업데이트합니다.
+                                existingExerciseInfo.textContent = logData.exercise;
+                            } else {
+                                // 없는 경우, 새로운 요소를 생성하여 추가합니다.
+                                const exerciseInfo = document.createElement('div');
+                                exerciseInfo.classList.add('exercise-info');
+                                exerciseInfo.textContent = logData.exercise;
+                                link.appendChild(exerciseInfo);
+                            }
+                        }
+
+                        cell.appendChild(link);
+                        date++;
                     } else {
                         const link = document.createElement('a');
                         link.textContent = date;
@@ -184,8 +257,13 @@ mysqli_close($con);
                         }
 
                         cell.appendChild(link);
-                        if (year === currentYear && month === currentMonth && date === today.getDate()) {
-                            // 오늘 날짜 표시
+                        // 이번 달에만 오늘 날짜 표시
+                        if (
+                            year === currentYear &&
+                            month === currentMonth &&
+                            date === today.getDate() &&
+                            currentMonth === new Date().getMonth() + 1
+                        ) {
                             cell.classList.add('today');
                         }
                         date++;
@@ -232,8 +310,13 @@ mysqli_close($con);
 
         // 드래그 앤 드롭 이벤트 핸들러
         function handleDragStart(event) {
-            const date = new Date(currentYear, currentMonth - 1, parseInt(event.target.textContent) + 1);
-            const formattedDate = date.toISOString().slice(0, 10);
+            // href 속성에서 대상 날짜를 가져옵니다.
+            const targetDate = new URL(event.target.href).searchParams.get('date');
+            const [year, month, day] = targetDate.split('-');
+
+            // 날짜 형식을 변경합니다.
+            const formattedDate = `${year}-${month}-${day}`;
+
             event.dataTransfer.setData('text/plain', formattedDate);
             event.dataTransfer.setData('application/json', event.target.dataset.exerciseLog);
         }

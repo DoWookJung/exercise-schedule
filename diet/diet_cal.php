@@ -173,19 +173,29 @@
 
                 cell.appendChild(link);
 
-          // 이전 달 데이터에 대한 총 칼로리 표시
-          if (dietLogData[link.href]) {
-            const calories = dietLogData[link.href].calories;
-            const calorieText = document.createElement('span');
-            calorieText.textContent = ` (총 칼로리: ${calories}kcal)`;
-            link.appendChild(calorieText);
-            totalCalories += calories; // 총 칼로리 누적
-          }
+                // 링크 요소에 데이터 설정
+                if (dietLogData.hasOwnProperty(date)) {
+                  const logData = dietLogData[`${year}-${month}-${date}`];
+                  link.dataset.dietLog = JSON.stringify(logData);
 
-          cell.appendChild(link);
+                  // 이미 식단 데이터를 표시하는 요소가 있는지 확인합니다.
+                  const existingDietInfo = link.querySelector('.diet-info');
+                  if (existingDietInfo) {
+                    // 이미 있는 경우, 텍스트만 업데이트합니다.
+                    existingDietInfo.textContent = logData.calories + 'kcal';
+                  } else {
+                    // 없는 경우, 새로운 요소를 생성하여 추가합니다.
+                    const dietInfo = document.createElement('div');
+                    dietInfo.classList.add('diet-info');
+                    dietInfo.textContent = logData.calories + 'kcal';
+                    link.appendChild(dietInfo);
+                  }
+                }
+
+                cell.appendChild(link);
             } else if (date > lastDay.getDate()) {
               // 다음 달 남는 빈 칸
-              const nextMonth = (currentMonth + 1) % 12; // Ensure nextMonth stays within 1-12 range
+              const nextMonth = (currentMonth + 1) % 12; //  nextMonth 변수가 항상 1에서 12 사이의 값을 유지
               const nextMonthDate = new Date(currentYear, nextMonth - 1, date - lastDay.getDate());
               const nextMonthDay = nextMonthDate.getDate();
               cell.textContent = nextMonthDay;
@@ -221,6 +231,7 @@
               cell.appendChild(link);
               date++;
             } else {
+              // 이번 달의 날짜
               const link = document.createElement('a');
               link.textContent = date;
               link.href = `./diet_main.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
@@ -250,8 +261,14 @@
                 }
               }
               cell.appendChild(link);
-              if (year === currentYear && month === currentMonth && date === today.getDate()) {
-                // 오늘 날짜 표시
+
+              // 이번 달에만 오늘 날짜 표시
+              if (
+                year === currentYear &&
+                month === currentMonth &&
+                date === today.getDate() &&
+                currentMonth === new Date().getMonth() + 1
+              ) {
                 cell.classList.add('today');
               }
               date++;
@@ -307,7 +324,7 @@
 }
   // 드래그 앤 드롭 이벤트 핸들러
   function handleDragStart(event) {
-   const targetDate = decodeURIComponent(event.target.href.split('?date=')[1]);
+  const targetDate = decodeURIComponent(event.target.href.split('?date=')[1]);
   const [year, month, day] = targetDate.split('-');
 
   const formattedDate = `${year}-${month}-${day}`;

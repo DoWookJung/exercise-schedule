@@ -148,7 +148,8 @@
       echo "<form action='cal_modify.php' method='post'>";
       echo "<input type='hidden' name='date' value='" . $date . "'>"; // date 값을 추가
       echo "<table>";
-      echo "<tr><th>운동 종목</th><th>무게 (kg)</th><th>횟수</th><th>세트 수</th></th>";
+      echo "<tr><th>운동 종목</th><th>무게 (kg)</th><th>횟수</th><th>세트 수</th>
+      <th colspan='3'><button type='button' class=\"my-button\" onclick=\"location.href='cal_alldelete.php?date=$date'\">전체삭제</button></th></th>";
       while($row = mysqli_fetch_assoc($result)) {
         echo "<tr>";
         echo "<input type='hidden' name='id[]' value='" . $row['id'] . "'>"; // id 값을 추가

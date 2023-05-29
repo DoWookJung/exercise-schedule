@@ -49,7 +49,7 @@ if ($result->num_rows > 0) {
             exit;
         }
     }
-
+    // echo json_encode(array('success' => true)); //테스트용
     // 운동 기록이 성공적으로 복사되었습니다.
     $response = [
         'success' => true,

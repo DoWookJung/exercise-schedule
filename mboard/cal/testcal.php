@@ -1,55 +1,27 @@
 <?php
-session_start();
+    session_start();
 
-if (isset($_SESSION["userid"]))
-    $userid = $_SESSION["userid"];
-else {
-    $userid = "";
-}
+    if (isset($_SESSION["userid"]))
+        $userid = $_SESSION["userid"];
+    else {
+        $userid = "";
+    }
 
-if (isset($_SESSION["username"]))
-    $username = $_SESSION["username"];
-else
-    $username = "";
+    if (isset($_SESSION["username"]))
+        $username = $_SESSION["username"];
+    else
+        $username = "";
 
-if (!$userid) {
-    echo "
-    <script>
-    alert('로그인 후 사용해주세요!');
-    history.go(-1);
-    </script>
-    ";
-    exit;
-}
-$exerciseLogData = array();
-include "../../include/db_connect.php";
-// 데이터베이스에서 운동 기록 데이터 가져오기
-$query = "SELECT * FROM workout_records WHERE name = '$username'";
-$result = mysqli_query($con, $query);
-if ($result) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $date = $row['date'];
-        $exercise = $row['exercise'];
-        $sets = $row['sets'];
+    if (!$userid) {
+        echo "
+        <script>
+        alert('로그인 후 사용해주세요!');
+        history.go(-1);
+        </script>
+        ";
+        exit;
+    }
 
-        // 이미 해당 날짜의 데이터가 있는지 확인
-        if (isset($exerciseLogData[$date])) {
-          // 이미 데이터가 있는 경우, 기존 데이터에 추가
-          $exerciseLogData[$date]['exercise'][] = $exercise;
-          $exerciseLogData[$date]['sets'][] = $sets;
-      } else {
-          // 새로운 날짜의 데이터인 경우, 배열로 초기화
-          $exerciseLogData[$date] = array(
-              'exercise' => array($exercise),
-              'sets' => array($sets)
-          );
-      }
-  }
-} else {
-    echo "운동 기록 데이터를 가져오는 중 오류가 발생했습니다: " . mysqli_error($con);
-}
-
-mysqli_close($con);
 ?>
 
 <!DOCTYPE html>
@@ -131,6 +103,37 @@ mysqli_close($con);
         </table>
     </div>
     <script>
+        <?php
+            $exerciseLogData = array();
+            include "../../include/db_connect.php";
+            // 데이터베이스에서 운동 기록 데이터 가져오기
+            $query = "SELECT * FROM workout_records WHERE name = '$username'";
+            $result = mysqli_query($con, $query);
+            if ($result) {
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $date = $row['date'];
+                    $exercise = $row['exercise'];
+                    $sets = $row['sets'];
+
+                    // 이미 해당 날짜의 데이터가 있는지 확인
+                    if (isset($exerciseLogData[$date])) {
+                    // 이미 데이터가 있는 경우, 기존 데이터에 추가
+                    $exerciseLogData[$date]['exercise'][] = $exercise;
+                    $exerciseLogData[$date]['sets'][] = $sets;
+                } else {
+                    // 새로운 날짜의 데이터인 경우, 배열로 초기화
+                    $exerciseLogData[$date] = array(
+                        'exercise' => array($exercise),
+                        'sets' => array($sets)
+                    );
+                }
+            }
+            } else {
+                echo "운동 기록 데이터를 가져오는 중 오류가 발생했습니다: " . mysqli_error($con);
+            }
+
+            mysqli_close($con);
+        ?>
         const calendarBody = document.querySelector('#calendar tbody');
         let currentYear;
         let currentMonth;
@@ -329,14 +332,39 @@ mysqli_close($con);
             event.preventDefault();
             const sourceDate = event.dataTransfer.getData('text/plain');
             
-
             // 대상 링크의 href 속성에서 전체 날짜 가져오기
-            const targetLink = event.target;
+            const targetLink = event.currentTarget;
             const targetDate = decodeURIComponent(targetLink.href.split('?date=')[1]);
 
-            // sourceDate에서 targetDate로 운동 기록 복사하기
-            copyExerciseRecords(sourceDate, targetDate);
-        }
+            // AJAX 요청을 보내기 위해 XMLHttpRequest 객체 생성
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'copy_exercise_records.php');
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            // 응답 처리
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        // 운동 기록 복사 성공 처리
+                        // 달력 표시 업데이트 또는 필요한 작업 수행
+                        updateCalendar(currentYear, currentMonth);
+                    } else {
+                        // 오류 처리
+                        console.error(response.message);
+                    }
+                } else {
+                    // 오류 처리
+                    console.error('AJAX 요청 실패');
+                }
+            };
+
+            // 운동 기록 복사를 위한 데이터 조합
+            const data = 'sourceDate=' + encodeURIComponent(sourceDate) + '&targetDate=' + encodeURIComponent(targetDate);
+
+            // AJAX 요청 전송
+            xhr.send(data);
+                }
 
         function copyExerciseRecords(sourceDate, targetDate) {
             // 운동 기록 복사를 위해 PHP 스크립트에 AJAX 요청 보내기
@@ -351,6 +379,7 @@ mysqli_close($con);
                     if (response.success) {
                         // 운동 기록 복사 성공 처리
                         // 달력 표시 업데이트 또는 필요한 작업 수행
+                        updateCalendar(currentYear, currentMonth);
                     } else {
                         // 오류 처리
                         console.error(response.message);
@@ -368,7 +397,7 @@ mysqli_close($con);
 
             xhr.send(`sourceDate=${encodeURIComponent(sourceDate)}&targetDate=${encodeURIComponent(targetDate)}`);
         }
-
+        
         // 초기 달력 표시
         const today = new Date();
         currentYear = today.getFullYear();

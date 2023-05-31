@@ -102,6 +102,7 @@
             </tbody>
         </table>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         <?php
             $exerciseLogData = array();
@@ -279,18 +280,19 @@
             for (const [date, logData] of Object.entries(exerciseLogData)) {
                 const [logYear, logMonth, logDate] = date.split('-');
                 if (logYear == year && logMonth == month) {
-                    const link = document.querySelector(`a[href$="${logYear}-${logMonth}-${logDate}"]`);
-                    if (link) {
-                        for (let i = 0; i < logData.exercise.length; i++) {
-                            const exerciseInfo = document.createElement('div');
-                            exerciseInfo.classList.add('exercise-info');
-                            exerciseInfo.textContent = logData.exercise[i] + ' (' + logData.sets[i] + ')';
-                            link.appendChild(exerciseInfo);
-                        }
-                      }
+                const link = document.querySelector(`a[href$="${logYear}-${logMonth}-${logDate}"]`);
+                if (link) {
+                    for (let i = 0; i < logData.exercise.length; i++) {
+                    const exerciseInfo = document.createElement('div');
+                    exerciseInfo.classList.add('exercise-info');
+                    exerciseInfo.textContent = logData.exercise[i] + ' (' + logData.sets[i] + ')';
+                    link.appendChild(exerciseInfo);
+                    }
                 }
             }
-          }
+        }
+        console.log("캘린더가 업데이트되었습니다.");
+    }
         // 이전 달로 이동
         document.querySelector('#prevMonth').addEventListener('click', () => {
             currentMonth--;
@@ -332,45 +334,35 @@
             event.preventDefault();
             const sourceDate = event.dataTransfer.getData('text/plain');
             
-
             // 대상 링크의 href 속성에서 전체 날짜 가져오기
-            const targetLink = event.target;
+            const targetLink = event.currentTarget;
             const targetDate = decodeURIComponent(targetLink.href.split('?date=')[1]);
 
-            // sourceDate에서 targetDate로 운동 기록 복사하기
-            copyExerciseRecords(sourceDate, targetDate);
-        }
-
-        function copyExerciseRecords(sourceDate, targetDate) {
-            // 운동 기록 복사를 위해 PHP 스크립트에 AJAX 요청 보내기
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', 'copy_exercise_records.php');
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-            xhr.onload = function () {
-                if (xhr.status === 200) {
-                    // 응답 처리
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.success) {
-                        // 운동 기록 복사 성공 처리
-                        // 달력 표시 업데이트 또는 필요한 작업 수행
-                        updateCalendar(currentYear, currentMonth);
-                    } else {
-                        // 오류 처리
-                        console.error(response.message);
-                    }
+            var data = {
+                sourceDate: sourceDate,
+                targetDate: targetDate
+            };
+            
+            // AJAX 요청 보내기
+            $.ajax({
+                url: 'copy_exercise_records.php',
+                type: 'POST',
+                data: data,
+                dataType: 'json',
+                success: function(response) {
+                if (response.success) {
+                    // 복사 성공 시, 캘린더 업데이트
+                    updateCalendar(currentYear, currentMonth); // 캘린더 업데이트 함수 호출
                 } else {
-                    // 오류 처리
-                    console.error('AJAX 요청 중에 오류가 발생했습니다.');
+                    // 복사 실패 시, 에러 처리
+                    console.log(response.message);
                 }
-            };
-
-            xhr.onerror = function () {
-                // 오류 처리
-                console.error('AJAX 요청 중에 오류가 발생했습니다.');
-            };
-
-            xhr.send(`sourceDate=${encodeURIComponent(sourceDate)}&targetDate=${encodeURIComponent(targetDate)}`);
+                },
+                error: function(xhr, status, error) {
+                // 에러 처리
+                console.log(error);
+                }
+            });
         }
         
         // 초기 달력 표시
@@ -381,4 +373,3 @@
     </script>
 </body>
 </html>
-

@@ -1,8 +1,15 @@
 <?php
+    session_start();
+
+    if (isset($_SESSION["username"]))
+        $username = $_SESSION["username"];
+    else
+        $username = "";
+
 // ini_set('display_errors', 1);
 // error_reporting(E_ALL);
 
-// header('Content-Type: application/json');
+header('Content-Type: application/json');
 include "../../include/db_connect.php";
 
 // AJAX 요청으로부터 소스 날짜와 대상 날짜를 가져옵니다.
@@ -22,7 +29,7 @@ if ($con->connect_error) {
 }
 
 // 소스 날짜로부터 운동 기록을 조회합니다.
-$sql = "SELECT * FROM workout_records WHERE date = '$sourceDate'";
+$sql = "SELECT * FROM workout_records WHERE date = '$sourceDate' AND name = '$username'";
 $result = mysqli_query($con, $sql); // SQL 명령어 실행
 
 if ($result->num_rows > 0) {
@@ -49,7 +56,7 @@ if ($result->num_rows > 0) {
             exit;
         }
     }
-    // echo json_encode(array('success' => true)); //테스트용
+    
     // 운동 기록이 성공적으로 복사되었습니다.
     $response = [
         'success' => true,

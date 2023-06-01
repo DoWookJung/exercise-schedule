@@ -59,6 +59,9 @@
       .appbar-menu li {
         margin-left: 20px;
       }
+      .other-month {
+            color: lightgray;
+      }
     </style>
   </head>
   <body>
@@ -131,7 +134,7 @@
       const calendarBody = document.querySelector('#calendar tbody');
       let currentYear;
       let currentMonth;
-
+      
       function updateCalendar(year, month) {
         const currentDate = new Date();
         currentYear = year; 
@@ -361,7 +364,38 @@
             const response = JSON.parse(responseText);
             if (response.success) {
               // 식단 기록 복사 성공 처리
+              updateCalendar(currentYear, currentMonth);
               // 캘린더 표시 업데이트 또는 필요한 작업 수행
+              const link = document.createElement('a');
+              link.textContent = date;
+              link.href = `./diet_main.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
+
+              // 링크 요소에 드래그 앤 드롭 이벤트 리스너 추가
+              link.addEventListener('dragstart', handleDragStart);
+              link.addEventListener('dragover', handleDragOver);
+              link.addEventListener('drop', handleDrop);
+              link.draggable = true;
+
+              // 링크 요소에 데이터 설정
+              if (dietLogData[`${year}-${month}-${date}`]) {
+                const logData = dietLogData[`${year}-${month}-${date}`];
+                link.dataset.dietLog = JSON.stringify(logData);
+
+                // 이미 식단 데이터를 표시하는 요소가 있는지 확인합니다.
+                const existingDietInfo = link.querySelector('.diet-info');
+                if (existingDietInfo) {
+                  // 이미 있는 경우, 텍스트만 업데이트합니다.
+                  existingDietInfo.textContent = logData.calories + 'kcal';
+                } else {
+                  // 없는 경우, 새로운 요소를 생성하여 추가합니다.
+                  const dietInfo = document.createElement('div');
+                  dietInfo.classList.add('diet-info');
+                  dietInfo.textContent = logData.calories + 'kcal';
+                  link.appendChild(dietInfo);
+                }
+              }
+              cell.appendChild(link);
+
             } else {
               // 오류 처리
               console.error(response.message);

@@ -64,6 +64,9 @@
         .appbar-menu li {
             margin-left: 20px;
         }
+        .other-month {
+            color: lightgray;
+      }
     </style>
 </head>
 <body>
@@ -349,6 +352,7 @@
                 type: 'POST',
                 data: data,
                 dataType: 'json',
+                cache: false,
                 success: function(response) {
                 if (response.success) {
                     // 복사 성공 시, 캘린더 업데이트

@@ -100,6 +100,7 @@
         </tbody>
       </table>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       <?php
             $dietLogData = array();
@@ -175,27 +176,6 @@
                 link.draggable = true;
 
                 cell.appendChild(link);
-
-                // 링크 요소에 데이터 설정
-                if (dietLogData.hasOwnProperty(date)) {
-                  const logData = dietLogData[`${year}-${month}-${date}`];
-                  link.dataset.dietLog = JSON.stringify(logData);
-
-                  // 이미 식단 데이터를 표시하는 요소가 있는지 확인합니다.
-                  const existingDietInfo = link.querySelector('.diet-info');
-                  if (existingDietInfo) {
-                    // 이미 있는 경우, 텍스트만 업데이트합니다.
-                    existingDietInfo.textContent = logData.calories + 'kcal';
-                  } else {
-                    // 없는 경우, 새로운 요소를 생성하여 추가합니다.
-                    const dietInfo = document.createElement('div');
-                    dietInfo.classList.add('diet-info');
-                    dietInfo.textContent = logData.calories + 'kcal';
-                    link.appendChild(dietInfo);
-                  }
-                }
-
-                cell.appendChild(link);
             } else if (date > lastDay.getDate()) {
               // 다음 달 남는 빈 칸
               const nextMonth = (currentMonth + 1) % 12; //  nextMonth 변수가 항상 1에서 12 사이의 값을 유지
@@ -212,25 +192,6 @@
               link.addEventListener('drop', handleDrop);
               link.draggable = true;
 
-              // 링크 요소에 데이터 설정
-              if (dietLogData[`${year}-${month}-${date}`]) {
-                const logData = dietLogData[`${year}-${month}-${date}`];
-                link.dataset.dietLog = JSON.stringify(logData);
-
-                // 이미 식단 데이터를 표시하는 요소가 있는지 확인합니다.
-                const existingDietInfo = link.querySelector('.diet-info');
-                if (existingDietInfo) {
-                  // 이미 있는 경우, 텍스트만 업데이트합니다.
-                  existingDietInfo.textContent = logData.calories + 'kcal';
-                } else {
-                  // 없는 경우, 새로운 요소를 생성하여 추가합니다.
-                  const dietInfo = document.createElement('div');
-                  dietInfo.classList.add('diet-info');
-                  dietInfo.textContent = logData.calories + 'kcal';
-                  link.appendChild(dietInfo);
-                }
-              }
-
               cell.appendChild(link);
               date++;
             } else {
@@ -244,25 +205,6 @@
               link.addEventListener('dragover', handleDragOver);
               link.addEventListener('drop', handleDrop);
               link.draggable = true;
-
-              // 링크 요소에 데이터 설정
-              if (dietLogData[`${year}-${month}-${date}`]) {
-                const logData = dietLogData[`${year}-${month}-${date}`];
-                link.dataset.dietLog = JSON.stringify(logData);
-
-                // 이미 식단 데이터를 표시하는 요소가 있는지 확인합니다.
-                const existingDietInfo = link.querySelector('.diet-info');
-                if (existingDietInfo) {
-                  // 이미 있는 경우, 텍스트만 업데이트합니다.
-                  existingDietInfo.textContent = logData.calories + 'kcal';
-                } else {
-                  // 없는 경우, 새로운 요소를 생성하여 추가합니다.
-                  const dietInfo = document.createElement('div');
-                  dietInfo.classList.add('diet-info');
-                  dietInfo.textContent = logData.calories + 'kcal';
-                  link.appendChild(dietInfo);
-                }
-              }
               cell.appendChild(link);
 
               // 이번 달에만 오늘 날짜 표시
@@ -348,75 +290,33 @@
       const targetDate = decodeURIComponent(targetLink.href.split('?date=')[1]);
       console.log(sourceDate);  //확인
       // sourceDate에서 targetDate로 식단 기록 복사
-      copyDietRecords(sourceDate, targetDate);
-    }
-    function copyDietRecords(sourceDate, targetDate) {
-      // 식단 기록 복사를 위한 PHP 스크립트로 AJAX 요청 보내기
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', 'copy_diet_records.php');
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          // 응답 처리
-          try {
-            const responseText = xhr.responseText.replace(/<[^>]+>/g, '');
-            const response = JSON.parse(responseText);
-            if (response.success) {
-              // 식단 기록 복사 성공 처리
-              updateCalendar(currentYear, currentMonth);
-              // 캘린더 표시 업데이트 또는 필요한 작업 수행
-              const link = document.createElement('a');
-              link.textContent = date;
-              link.href = `./diet_main.php?date=${encodeURIComponent(year + '-' + ('0' + month).slice(-2) + '-' + ('0' + date).slice(-2))}`;
-
-              // 링크 요소에 드래그 앤 드롭 이벤트 리스너 추가
-              link.addEventListener('dragstart', handleDragStart);
-              link.addEventListener('dragover', handleDragOver);
-              link.addEventListener('drop', handleDrop);
-              link.draggable = true;
-
-              // 링크 요소에 데이터 설정
-              if (dietLogData[`${year}-${month}-${date}`]) {
-                const logData = dietLogData[`${year}-${month}-${date}`];
-                link.dataset.dietLog = JSON.stringify(logData);
-
-                // 이미 식단 데이터를 표시하는 요소가 있는지 확인합니다.
-                const existingDietInfo = link.querySelector('.diet-info');
-                if (existingDietInfo) {
-                  // 이미 있는 경우, 텍스트만 업데이트합니다.
-                  existingDietInfo.textContent = logData.calories + 'kcal';
+      var data = {
+                sourceDate: sourceDate,
+                targetDate: targetDate
+            };
+            
+            // AJAX 요청 보내기
+            $.ajax({
+                url: 'copy_diet_records.php',
+                type: 'POST',
+                data: data,
+                dataType: 'json',
+                cache: false,
+                success: function(response) {
+                if (response.success) {
+                    // 복사 성공 시, 캘린더 업데이트
+                    updateCalendar(currentYear, currentMonth); // 캘린더 업데이트 함수 호출
                 } else {
-                  // 없는 경우, 새로운 요소를 생성하여 추가합니다.
-                  const dietInfo = document.createElement('div');
-                  dietInfo.classList.add('diet-info');
-                  dietInfo.textContent = logData.calories + 'kcal';
-                  link.appendChild(dietInfo);
+                    // 복사 실패 시, 에러 처리
+                    console.log(response.message);
                 }
-              }
-              cell.appendChild(link);
-
-            } else {
-              // 오류 처리
-              console.error(response.message);
-            }
-          } catch (error) {
-            console.error('유효하지 않은 JSON 형식입니다:', error);
-          }
-        } else {
-          // 오류 처리
-          console.error('AJAX 요청 중 오류가 발생했습니다.');
+                },
+                error: function(xhr, status, error) {
+                // 에러 처리
+                console.log(error);
+                }
+            });
         }
-      };
-
-
-      xhr.onerror = function() {
-        // 오류 처리
-        console.error('AJAX 요청 중 오류가 발생했습니다.');
-      };
-
-      xhr.send(`sourceDate=${encodeURIComponent(sourceDate)}&targetDate=${encodeURIComponent(targetDate)}`);
-    }
 
       // 초기 달력 표시
       const today = new Date();

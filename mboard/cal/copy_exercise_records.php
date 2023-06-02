@@ -13,7 +13,6 @@ include "../../include/db_connect.php";
 $sourceDate = $_POST['sourceDate'];
 $targetDate = $_POST['targetDate'];
 
-
 // 데이터베이스 연결을 확인합니다.
 if ($con->connect_error) {
     // 연결 실패 시

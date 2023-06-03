@@ -24,14 +24,24 @@
     <link rel="stylesheet" type="text/css" href="../mboard/cal/style.css">
     <script src="diet_script.js"></script>
     <style>
+      td input,
+      td .my-button {
+        margin: 0 auto;
+        display: block;
+      }
          /* 앱바 스타일 */
       .appbar {
-        background-color: #6cdaee; /*동호-상단 색상 변경*/
+        background-color: #6cdaee;
         height: 60px;
         display: flex;
         align-items: center;
         padding: 0 20px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
       }
 
       .appbar-title {
@@ -53,8 +63,6 @@
       .appbar-menu li {
         margin-left: 20px;
       }
-    </script>
-    <style>
     td {
         vertical-align: top; /*달력의 숫자 왼쪽위로 정렬, 달력 칸 크기 키움*/
         text-align: left; 

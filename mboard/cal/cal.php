@@ -21,7 +21,6 @@
         ";
         exit;
     }
-
 ?>
 
 <!DOCTYPE html>
@@ -36,7 +35,7 @@
           }
         /* App bar style */
         .appbar {
-            background-color: #6cdaee; /* Dongho - 상단 색상 변경 */
+            background-color: #6cdaee; /*상단 색상 변경 */
             height: 60px;
             display: flex;
             align-items: center;
@@ -66,7 +65,14 @@
         }
         .other-month {
             color: lightgray;
-      }
+        }
+        thead th:nth-child(1) {
+        color: red;
+        }
+
+        thead th:nth-child(7) {
+            color: blue;
+        }
     </style>
 </head>
 <body>
@@ -91,13 +97,13 @@
         <table>
             <thead>
             <tr>
-                <th>일</th>
-                <th>월</th>
-                <th>화</th>
-                <th>수</th>
-                <th>목</th>
-                <th>금</th>
-                <th>토</th>
+                <th><strong>일</strong></th>
+                <th><strong>월</strong></th>
+                <th><strong>화</strong></th>
+                <th><strong>수</strong></th>
+                <th><strong>목</strong></th>
+                <th><strong>금</strong></th>
+                <th><strong>토</strong></th>
             </tr>
             </thead>
             <tbody>
@@ -165,14 +171,10 @@
             
             // 운동 기록 데이터를 JavaScript 변수에 할당합니다.
             const exerciseLogData = <?php echo json_encode($exerciseLogData); ?>;
-            console.log(exerciseLogData); // exerciseLogData 객체를 콘솔에 출력하여 확인해보세요.
-
             const firstDay = new Date(`${year}-${month}-01`);
             const lastDay = new Date(year, month, 0);
-
             const dateDisplay = document.querySelector('#dateDisplay');
             dateDisplay.textContent = `${year}년 ${month}월`;
-
             calendarBody.innerHTML = '';
 
             let date = 1;
@@ -200,17 +202,6 @@
 
                         cell.appendChild(link);
                         
-                        // 이전 달 데이터 표시
-                        const prevMonthData = exerciseLogData[`${prevMonthYear}-${('0' + prevMonth).slice(-2)}`];
-                        console.log(prevMonthData);
-                        if (prevMonthData && prevMonthData.exercise && prevMonthData.exercise.length > 0) {
-                            for (let i = 0; i < prevMonthData.exercise.length; i++) {
-                                const exerciseInfo = document.createElement('div');
-                                exerciseInfo.classList.add('exercise-info');
-                                exerciseInfo.textContent = prevMonthData.exercise[i] + ' (' + prevMonthData.sets[i] + ')';
-                                link.appendChild(exerciseInfo);
-                            }
-                        }
                     } else if (date > lastDay.getDate()) {
                         // 다음 달 남는 빈 칸
                         nextMonth = (currentMonth + 1) % 12; // nextMonth 변수가 항상 1에서 12 사이의 값을 유지
@@ -228,21 +219,6 @@
                         link.draggable = true;
 
                         cell.appendChild(link);
-                        // 다음 달 데이터 표시
-                        const nextMonthKey = `${nextMonthYear}-${('0' + nextMonth).slice(-2)}`;
-                        const nextMonthData = exerciseLogData[nextMonthKey];
-                                                console.log(nextMonthData);
-                        if (nextMonthData && nextMonthData.exercise && nextMonthData.exercise.length > 0) {
-                            for (let i = 0; i < nextMonthData.exercise.length; i++) {
-                                const exerciseInfo = document.createElement('div');
-                                exerciseInfo.classList.add('exercise-info');
-                                exerciseInfo.textContent = nextMonthData.exercise[i] + ' (' + nextMonthData.sets[i] + ')';
-                                const nextMonthLink = document.querySelector(`a[href$="${nextMonthYear}-${('0' + nextMonth).slice(-2)}"]`);
-                                if (nextMonthLink) {
-                                    nextMonthLink.appendChild(exerciseInfo);
-                                }
-                            }
-                        }
 
                         date++;
                     } else {
@@ -275,13 +251,20 @@
             // exerciseLogData를 순회하며 운동과 세트 데이터를 캘린더에 추가합니다.
             for (const [date, logData] of Object.entries(exerciseLogData)) {
                 const [logYear, logMonth, logDate] = date.split('-');
-                if (logYear == year && logMonth == month) {
+                if (
+                    (logYear == year && logMonth == month) ||
+                    (logYear == prevMonthYear && logMonth == prevMonth) ||
+                    (logYear == nextMonthYear && logMonth == nextMonth)
+                ) {
                 const link = document.querySelector(`a[href$="${logYear}-${logMonth}-${logDate}"]`);
                 if (link) {
                     for (let i = 0; i < logData.exercise.length; i++) {
                     const exerciseInfo = document.createElement('div');
                     exerciseInfo.classList.add('exercise-info');
                     exerciseInfo.textContent = logData.exercise[i] + ' (' + logData.sets[i] + ')';
+                    if ((logYear == prevMonthYear && logMonth == prevMonth) || (logYear == nextMonthYear && logMonth == nextMonth)) {
+                        exerciseInfo.classList.add('other-month');
+                    }
                     link.appendChild(exerciseInfo);
                     }
                 }
@@ -348,8 +331,8 @@
                 success: function(response) {
                 if (response.success) {
                     // 복사 성공 시, 캘린더 업데이트
-                    updateCalendar(currentYear, currentMonth); // 캘린더 업데이트 함수 호출
-                    alert(response.message);
+                    // updateCalendar(currentYear, currentMonth); // 캘린더 업데이트 함수 호출
+                    location.reload();
                 } else {
                     // 복사 실패 시, 에러 처리
                     console.log(response.message);

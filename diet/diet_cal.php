@@ -1,17 +1,16 @@
 <?php
     session_start();
-
-    if (isset($_SESSION["userid"]))
-        $userid = $_SESSION["userid"];
-    else {
-        $userid = "";
-    }
-
-    if (isset($_SESSION["username"]))
-        $username = $_SESSION["username"];
-    else
-        $username = "";
-
+    if (!empty($_SESSION["userid"])) {
+      $userid = $_SESSION["userid"];
+  } else {
+      $userid = "";
+  }
+  
+  if (!empty($_SESSION["username"])) {
+      $username = $_SESSION["username"];
+  } else {
+      $username = "";
+  }
 	if (!$userid) {
 		echo "
 				<script>
@@ -32,7 +31,7 @@
     <style>
          /* 앱바 스타일 */
       .appbar {
-        background-color: #6cdaee; /*동호-상단 색상 변경*/
+        background-color: #6cdaee; /*상단 색상 변경*/
         height: 60px;
         display: flex;
         align-items: center;
@@ -62,6 +61,13 @@
       .other-month {
             color: lightgray;
       }
+      thead th:nth-child(1) {
+        color: red;
+      }
+
+      thead th:nth-child(7) {
+        color: blue;
+      }
     </style>
   </head>
   <body>
@@ -86,13 +92,13 @@
       <table>
         <thead>
           <tr>
-            <th>일</th>
-            <th>월</th>
-            <th>화</th>
-            <th>수</th>
-            <th>목</th>
-            <th>금</th>
-            <th>토</th>
+            <th><strong>일</strong></th>
+            <th><strong>월</strong></th>
+            <th><strong>화</strong></th>
+            <th><strong>수</strong></th>
+            <th><strong>목</strong></th>
+            <th><strong>금</strong></th>
+            <th><strong>토</strong></th>
           </tr>
         </thead>
         <tbody>
@@ -137,27 +143,38 @@
       let currentMonth;
       
       function updateCalendar(year, month) {
-        const currentDate = new Date();
-        currentYear = year; 
-        currentMonth = month; 
+        const currentDate  = new Date();
+        currentYear = year;
+        currentMonth = month;
+
+        // 이전 달 계산
+        let prevMonthYear = currentYear;
+        let prevMonth = currentMonth - 1;
+        if (prevMonth < 1) {
+        prevMonth = 12;
+        prevMonthYear--;
+        }
+        
+        // 다음 달 계산
+        let nextMonthYear = currentYear;
+        let nextMonth = currentMonth + 1;
+        if (nextMonth > 12) {
+            nextMonth = 1;
+            nextMonthYear++;
+        }
         // 식단 기록 데이터를 JavaScript 변수에 할당합니다.
         const dietLogData = <?php echo json_encode($dietLogData); ?>;
-
         const firstDay = new Date(`${year}-${month}-01`);
         const lastDay = new Date(year, month, 0);
-
         const dateDisplay = document.querySelector('#dateDisplay');
         dateDisplay.textContent = `${year}년 ${month}월`;
-
         calendarBody.innerHTML = '';
 
         let date = 1;
-        let totalCalories = 0; // 총 칼로리를 저장할 변수 추가
         for (let i = 0; i < 6; i++) {
           const row = document.createElement('tr');
           for (let j = 0; j < 7; j++) {
             const cell = document.createElement('td');
-  
             if (i === 0 && j < firstDay.getDay()) {
                  // 이번 달 시작 이전의 빈 칸
                 const prevMonth = currentMonth === 1 ? 12 : currentMonth - 1;
@@ -226,12 +243,18 @@
         // dietLogData를 순회하며 식단 데이터를 캘린더에 추가합니다.
         for (const [date, logData] of Object.entries(dietLogData)) {
             const [logYear, logMonth, logDate] = date.split('-');
-            if (logYear == year && logMonth == month) {
+            if ((logYear == year && logMonth == month) ||
+                    (logYear == prevMonthYear && logMonth == prevMonth) ||
+                    (logYear == nextMonthYear && logMonth == nextMonth)
+                ) {
                 const link = document.querySelector(`a[href$="${logYear}-${logMonth}-${logDate}"]`);
                 if (link) {
                     const dietInfo = document.createElement('div');
                     dietInfo.classList.add('diet-info');
                     dietInfo.textContent = logData.calories + 'kcal';
+                    if ((logYear == prevMonthYear && logMonth == prevMonth) || (logYear == nextMonthYear && logMonth == nextMonth)) {
+                        dietInfo.classList.add('other-month');
+                    }
                     link.appendChild(dietInfo);
                 }
               }
@@ -305,7 +328,8 @@
                 success: function(response) {
                 if (response.success) {
                     // 복사 성공 시, 캘린더 업데이트
-                    updateCalendar(currentYear, currentMonth); // 캘린더 업데이트 함수 호출
+                    // updateCalendar(currentYear, currentMonth); // 캘린더 업데이트 함수 호출
+                    location.reload();
                 } else {
                     // 복사 실패 시, 에러 처리
                     console.log(response.message);
@@ -317,6 +341,34 @@
                 }
             });
         }
+        function update(year, month) {
+    var data = {
+        year: year,
+        month: month
+    };
+    
+    // AJAX 요청 보내기
+    $.ajax({
+        url: 'get_calendar_data.php',
+        type: 'POST',
+        data: data,
+        dataType: 'json',
+        cache: false,
+        success: function(response) {
+            if (response.success) {
+                // 서버에서 가져온 데이터로 캘린더 업데이트
+                renderCalendar(response.data);
+            } else {
+                // 오류 처리
+                console.log(response.message);
+            }
+        },
+        error: function(xhr, status, error) {
+            // 오류 처리
+            console.log(error);
+        }
+    });
+}
 
       // 초기 달력 표시
       const today = new Date();

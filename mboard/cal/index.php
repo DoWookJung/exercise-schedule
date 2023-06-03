@@ -6,12 +6,16 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" type="text/css" href="../style.css">
   <style>
+  td input,
+  td .my-button {
+    margin: 0 auto;
+    display: block;
+  }
   td {
-    vertical-align: top; /*달력의 숫자 왼쪽위로 정렬, 달력 칸 크기 키움*/
     text-align: left; 
     width: 40px;
     height: 40px;
-    /* vertical-align: middle; */
+    vertical-align: middle;
     border: 1px solid #ccc;
     position: relative;
   }
@@ -20,7 +24,7 @@
 <body>
   <div class="container">
     <h1>
-    <img src = "dumbell.PNG" alt="dumbell" width="50" height="45"> <!--동호- 덤벨 이미지 추가-->
+    <img src = "dumbell.PNG" alt="dumbell" width="50" height="45">
     <a href="./cal.php">운동 일지</a>
     </h1>
     <form action="save.php" method="post">
@@ -146,6 +150,7 @@
     // check if any exercises were found
     if (mysqli_num_rows($result) > 0) {
       echo "<form action='cal_modify.php' method='post'>";
+      $totalsets = 0;
       echo "<input type='hidden' name='date' value='" . $date . "'>"; // date 값을 추가
       echo "<table>";
       echo "<tr><th>운동 종목</th><th>무게 (kg)</th><th>횟수</th><th>세트 수</th>
@@ -163,7 +168,9 @@
 
         $id = $row['id'];
         echo "</tr>";
+        $totalsets += $row['sets']; 
       }
+      echo " <tr><th colspan='3' style='text-align: right;'>총 세트수:</th><th><strong>$totalsets</strong></th></tr>";
       echo "</table>";
       echo "</form>";
       

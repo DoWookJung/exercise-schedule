@@ -6,7 +6,7 @@
   }
   
   table {
-    border-collapse: collapse; /*동호-달력 크기 줄이고 페이지 가운데 오도록 배치*/
+    border-collapse: collapse; /*달력 크기 줄이고 페이지 가운데 오도록 배치*/
     margin:0 auto;
     width: 100%;
     height: 80%;
@@ -45,7 +45,6 @@
   
   td a:before {
     content: '';
-    /* position: absolute;   동그라미 */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -60,7 +59,6 @@
     background-color: #6cdaee;
   }
   
-
   .today {
     background-color: yellow;
   }
@@ -85,14 +83,4 @@
     background-color: transparent;
     cursor: pointer;
     vertical-align: middle;
-    }
-      /* Calendar style */
-    #calendar-container {
-        display: flex;
-        flex-direction: row;
-    }
-
-    #calendar {
-        flex: 5;
-        padding: 20px;
     }

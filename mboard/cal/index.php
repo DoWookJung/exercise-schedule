@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>운동일지</title>
+  <link rel="shortcut icon" type="health.png" sizes="16x16" href="../../img/health.png">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" type="text/css" href="../style.css">
   <style>
@@ -10,6 +11,7 @@
   td .my-button {
     margin: 0 auto;
     display: block;
+    border:0;
   }
   td {
     text-align: left; 
@@ -19,15 +21,30 @@
     border: 1px solid #ccc;
     position: relative;
   }
+  a {
+      text-decoration: none;
+    }
+    form {
+    border: 1px solid black;
+    padding: 15px; 
+    }
+
+  h2 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
 </style>
 </head>
 <body>
-  <div class="container">
-    <h1>
-    <img src = "dumbell.PNG" alt="dumbell" width="50" height="45">
+<h1>
+    <a href="./cal.php">
+        <img src="../../img/dumbell.png" alt="dumbell" width="50" height="45">
+      </a>
     <a href="./cal.php">운동 일지</a>
-    </h1>
+  </h1>
+  <div class="container">
     <form action="save.php" method="post">
+
       <div class="form-group">
       <?php 
       if(isset($_GET['date'])) {
@@ -131,9 +148,9 @@
         <button type="submit" class="my-button">저장</button>
       </div>
     </form>
-    <hr>
-    <h2>저장한 운동 기록</h2>
+
     
+    <h2><img src="../../img/exercise.png" alt="exercise" width="60" height="50" style="margin-right: 10px;">저장한 운동 기록</h2>
     <?php
 	  include "../../include/db_connect.php";
     $sql = "select * from workout_records where date='$date'";	  
@@ -153,8 +170,11 @@
       $totalsets = 0;
       echo "<input type='hidden' name='date' value='" . $date . "'>"; // date 값을 추가
       echo "<table>";
-      echo "<tr><th>운동 종목</th><th>무게 (kg)</th><th>횟수</th><th>세트 수</th>
-      <th colspan='3'><button type='button' class=\"my-button\" onclick=\"location.href='cal_alldelete.php?date=$date'\">전체삭제</button></th></th>";
+      echo "<tr><th style='background-color:#FAC8C8;'>운동 종목</th>
+            <th style='background-color:#FAC8C8;'>무게 (kg)</th>
+            <th style='background-color:#FAC8C8;'>횟수</th>
+            <th style='background-color:#FAC8C8;'>세트 수</th>
+            <th colspan='3' style='background-color:#FAC8C8;'><button type='button' class=\"my-button\" onclick=\"location.href='cal_alldelete.php?date=$date'\">전체삭제</button></th></th>";
       while($row = mysqli_fetch_assoc($result)) {
         echo "<tr>";
         echo "<input type='hidden' name='id[]' value='" . $row['id'] . "'>"; // id 값을 추가
@@ -177,10 +197,11 @@
       echo "</table>";
       echo "</form>";
     } else {
+      echo "<div style='text-align: center; border: 1px solid #000; padding: 30px;'>";
       echo "<p>아직 추가한 운동이 없습니다.</p>";
-    }
+      echo "</div>";
+  }
 
     mysqli_close($con);?>
 </body>
 </html>
-

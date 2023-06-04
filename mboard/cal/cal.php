@@ -27,9 +27,11 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>캘린더</title>
+    <title>운동 캘린더</title>
+    <link rel="shortcut icon" type="health.png" sizes="16x16" href="/git-master/img/health.png">
     <link rel="stylesheet" type="text/css" href="../style.css">
     <style>
+        
         .exercise-info {
               font-size: 10px; /* 원하는 글자 크기로 설정 */
           }
@@ -46,7 +48,6 @@
         .appbar-title {
             font-size: 24px;
             margin-right: 20px;
-
         }
 
         .appbar-menu {
@@ -69,20 +70,31 @@
         thead th:nth-child(1) {
         color: red;
         }
-
         thead th:nth-child(7) {
+        color: blue;
+        }
+        tbody td:nth-child(1) a {
+            color: red;
+        }
+
+        tbody td:nth-child(7) a {
             color: blue;
         }
+        a {
+        text-decoration: none;
+        }
+
     </style>
 </head>
 <body>
 <!-- Add App Bar -->
 <div class="appbar">
+    <img src="../../img/dumbell.png" alt="식단 일지" width="50" height="50" style="margin-right:10px;">     
     <h1 class="appbar-title">운동 캘린더</h1>
     <div class="appbar-menu">
         <ul>
             <li><a href="../../main/index.php">메인</a></li>
-            <li><a href="../../diet/diet_cal.php">식단 다이어리</a></li>
+            <li><a href="../../diet/diet_cal.php">식단 캘린더</a></li>
             <li><a href="../../member/logout.php">로그아웃</a></li>
         </ul>
     </div>

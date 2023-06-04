@@ -40,7 +40,7 @@ if (isset($_GET['date'])) {
 <body>
   <h1>
     <a href="./diet_cal.php">
-      <img src="diet.png" alt="식단 일지" width="60" height="60">
+      <img src="../img/diet.png" alt="식단 일지" width="60" height="60">
     </a>
     <a href="./diet_cal.php">식단 일지</a>
   </h1>
@@ -54,7 +54,7 @@ if (isset($_GET['date'])) {
   <div class="meal-container">
     <th>
       <a href="diet_plus_index.php?meal=아침&date=<?php echo $date; ?>">
-        <img src="breakfast.png" alt="아침" width="60" height="60">
+        <img src="../img/breakfast.png" alt="아침" width="60" height="60">
       </a>
     </th>
     <a href="diet_plus_index.php?meal=아침&date=<?php echo $date; ?>" style="font-size: 24px; margin-left : 20px">아침</a>
@@ -68,7 +68,7 @@ if (isset($_GET['date'])) {
   <div class="meal-container">
     <th>
       <a href="diet_plus_index.php?meal=점심&date=<?php echo $date; ?>">
-        <img src="lunch.png" alt="점심" width="60" height="60">
+        <img src="../img/lunch.png" alt="점심" width="60" height="60">
       </a>
     </th>
     <a href="diet_plus_index.php?meal=점심&date=<?php echo $date; ?>" style="font-size: 24px; margin-left : 20px">점심</a>
@@ -82,7 +82,7 @@ if (isset($_GET['date'])) {
   <div class="meal-container">
     <th>
       <a href="diet_plus_index.php?meal=저녁&date=<?php echo $date; ?>">
-        <img src="dinner.png" alt="저녁" width="60" height="60">
+        <img src="../img/dinner.png" alt="저녁" width="60" height="60">
       </a>
     </th>
     <a href="diet_plus_index.php?meal=저녁&date=<?php echo $date; ?>" style="font-size: 24px; margin-left : 20px">저녁</a>
@@ -96,7 +96,7 @@ if (isset($_GET['date'])) {
   <div class="meal-container">
     <th>
       <a href="diet_plus_index.php?meal=간식&date=<?php echo $date; ?>">
-        <img src="snack.png" alt="간식" width="60" height="60">
+        <img src="../img/snack.png" alt="간식" width="60" height="60">
       </a>
     </th>
     <a href="diet_plus_index.php?meal=간식&date=<?php echo $date; ?>" style="font-size: 24px; margin-left : 20px">간식</a>

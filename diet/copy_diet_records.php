@@ -49,6 +49,7 @@ if ($result->num_rows > 0) {
             echo json_encode($response);
             exit;
         }
+        
     }
 
     // 운동 기록이 성공적으로 복사되었습니다.

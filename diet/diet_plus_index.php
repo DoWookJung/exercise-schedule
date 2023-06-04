@@ -20,6 +20,7 @@
   <head>
     <meta charset="UTF-8">
     <title>식단일지</title>
+    <link rel="shortcut icon" type="health.png" sizes="16x16" href="../img/health.png">
     <link rel="stylesheet" type="text/css" href="../mboard/style.css">
     <link rel="stylesheet" type="text/css" href="../mboard/cal/style.css">
     <script src="diet_script.js"></script>
@@ -64,20 +65,39 @@
       .appbar-menu li {
         margin-left: 20px;
       }
-    td {
-        vertical-align: top; /*달력의 숫자 왼쪽위로 정렬, 달력 칸 크기 키움*/
-        text-align: left; 
+      td {
         width: 40px;
         height: 40px;
-        /* vertical-align: middle; */
+        vertical-align: middle;
         border: 1px solid #ccc;
         position: relative;
+        text-align: center;
       }
-    </style>
+
+      a {
+        text-decoration: none;
+        }
+      form {
+      border: 1px solid black;
+      padding: 15px; 
+      }
+
+      input[type="date"],
+      input[type="meal"],
+      input[type="search"],
+      input[type="text"] {
+        margin-bottom: 15px;
+      }
+      h2 {
+      margin-top: 15px;
+      margin-bottom: 15px;
+      }
+</style>
   </head>
     <body>
     <!-- 앱바 추가 -->
     <div class="appbar">
+      <img src="../img/diet.png" alt="식단 일지" width="50" height="50">
       <h1 class="appbar-title">식단 캘린더</h1>
       <div class="appbar-menu">
         <ul>
@@ -141,7 +161,7 @@
         <button type="submit" class="my-button">저장</button>
     </form>
     <!-- <hr> -->
-    <h2>저장한 식단 기록</h2>
+    <h2><img src="../img/food.png" alt="food" width="60" height="40" style="margin-right: 10px;">저장한 식단 기록</h2>
     <?php
     include "../include/db_connect.php";
     if (isset($_SESSION["username"])) 
@@ -168,7 +188,11 @@
     echo "<form action='diet_modify.php' method='post'>";
     echo "<table>";
     echo "<input type='hidden' name='date' value='" . $date . "'>"; // date 값을 추가
-    echo "<tr><th>식사</th><th>음식 이름</th><th>용량</th><th>칼로리</th><th colspan='2'><button type='button' class=\"my-button\" onclick=\"location.href='diet_alldelete.php?date=$date&meal=$meal'\">전체삭제</button></th></th>";
+    echo "<tr><th style='background-color:#FAC8C8;'>식사</th>
+          <th style='background-color:#FAC8C8;'>음식 이름</th>
+          <th style='background-color:#FAC8C8;'>용량</th>
+          <th style='background-color:#FAC8C8;'>칼로리</th>
+          <th colspan='2' style='background-color:#FAC8C8;'><button type='button' class=\"my-button\" onclick=\"location.href='diet_alldelete.php?date=$date&meal=$meal'\">전체삭제</button></th></th>";
     $totalCalories = 0;
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";
@@ -186,8 +210,10 @@
     echo "</table>";
     echo "</form>";
     } else {
-    echo "<p>저장된 항목이 없습니다.</p>";
-    }
+      echo "<div style='text-align: center; border: 1px solid #000; padding: 30px;'>";
+      echo "<p>저장된 항목이 없습니다.</p>";
+      echo "</div>";
+  }
 
     mysqli_close($con);
     ?>

@@ -26,7 +26,8 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>달력</title>
+    <title>식단 캘린더</title>
+    <link rel="shortcut icon" type="health.png" sizes="16x16" href="../img/health.png">
     <link rel="stylesheet" type="text/css" href="../mboard/style.css">
     <style>
          /* 앱바 스타일 */
@@ -68,16 +69,27 @@
       thead th:nth-child(7) {
         color: blue;
       }
+      tbody td:nth-child(1) a {
+            color: red;
+        }
+
+        tbody td:nth-child(7) a {
+            color: blue;
+        }
+      a {
+      text-decoration: none;
+    }
     </style>
   </head>
   <body>
     <!-- 앱바 추가 -->
     <div class="appbar">
-      <h1 class="appbar-title">식단 캘린더</h1>
+    <img src="../img/diet.png" alt="식단 일지" width="50" height="50" style="margin-right:10px;">  
+    <h1 class="appbar-title"> 식단 캘린더</h1>
       <div class="appbar-menu">
         <ul>
           <li><a href="../main/index.php">메인</a></li>
-          <li><a href="../mboard/cal/cal.php">운동일지</a></li>
+          <li><a href="../mboard/cal/cal.php">운동 캘린더</a></li>
           <li><a href="../member/logout.php">로그아웃</a></li>
         </ul>
       </div>
@@ -341,34 +353,6 @@
                 }
             });
         }
-        function update(year, month) {
-    var data = {
-        year: year,
-        month: month
-    };
-    
-    // AJAX 요청 보내기
-    $.ajax({
-        url: 'get_calendar_data.php',
-        type: 'POST',
-        data: data,
-        dataType: 'json',
-        cache: false,
-        success: function(response) {
-            if (response.success) {
-                // 서버에서 가져온 데이터로 캘린더 업데이트
-                renderCalendar(response.data);
-            } else {
-                // 오류 처리
-                console.log(response.message);
-            }
-        },
-        error: function(xhr, status, error) {
-            // 오류 처리
-            console.log(error);
-        }
-    });
-}
 
       // 초기 달력 표시
       const today = new Date();

@@ -28,6 +28,7 @@
       td .my-button {
         margin: 0 auto;
         display: block;
+        border:0;
       }
          /* 앱바 스타일 */
       .appbar {
@@ -139,7 +140,7 @@
         <br>
         <button type="submit" class="my-button">저장</button>
     </form>
-    <hr>
+    <!-- <hr> -->
     <h2>저장한 식단 기록</h2>
     <?php
     include "../include/db_connect.php";

@@ -3,6 +3,7 @@
   }
   h1 {
     text-align: center;
+    
   }
   
   table {
@@ -28,7 +29,6 @@
     text-align: left; 
     width: 60px;
     height: 100px;
-    /* vertical-align: middle; */
     border: 1px solid #ccc;
     position: relative;
   }

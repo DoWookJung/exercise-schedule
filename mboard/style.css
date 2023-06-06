@@ -62,7 +62,11 @@
   .today {
     background-color: yellow;
   }
-  
+  #dateSelector{
+    font-size: 15px; /*xxxx년 x월 글자크키 키움*/
+    margin-bottom: 10px;
+    vertical-align: middle;
+  }
   #dateDisplay {
     font-size: 30px; /*xxxx년 x월 글자크키 키움*/
     margin-bottom: 10px;
@@ -84,3 +88,4 @@
     cursor: pointer;
     vertical-align: middle;
     }
+  

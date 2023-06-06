@@ -28,7 +28,7 @@
 <head>
     <meta charset="UTF-8">
     <title>운동 캘린더</title>
-    <link rel="shortcut icon" type="health.png" sizes="16x16" href="/git-master/img/health.png">
+    <link rel="shortcut icon" type="health.png" sizes="16x16" href="../../img/health.png">
     <link rel="stylesheet" type="text/css" href="../style.css">
     <style>
         
@@ -83,7 +83,22 @@
         a {
         text-decoration: none;
         }
-
+        .dropbtn{
+        background-color: white;
+        border:0;
+        font-size: 20px; 
+        }    
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            padding: 12px 16px;
+        }
+        select {
+            font-size: 15px; 
+        }
     </style>
 </head>
 <body>
@@ -104,6 +119,45 @@
         <div id="dateNav">
             <button id="prevMonth"><</button> <!-- 이전 달 대신 <,>로 변경 -->
             <h1 id="dateDisplay"></h1>
+            <div class="dropdown">
+                <button onclick="toggleDropdown()" class="dropbtn">↓</button>
+                <div id="dropdown-content" class="dropdown-content">
+                    <select id="year-select">
+                        <option value="2010">2010년</option>
+                        <option value="2011">2011년</option>
+                        <option value="2012">2012년</option>
+                        <option value="2013">2013년</option>
+                        <option value="2014">2014년</option>
+                        <option value="2015">2015년</option>
+                        <option value="2016">2016년</option>
+                        <option value="2017">2017년</option>
+                        <option value="2018">2018년</option>
+                        <option value="2019">2019년</option>
+                        <option value="2020">2020년</option>
+                        <option value="2021">2021년</option>
+                        <option value="2022">2022년</option>
+                        <option value="2023">2023년</option>
+                        <option value="2024">2024년</option>
+                        <option value="2025">2025년</option>
+                        <!-- 다른 년도 옵션들 추가 -->
+                    </select>
+                    <select id="month-select">
+                        <option value="1">1월</option>
+                        <option value="2">2월</option>
+                        <option value="3">3월</option>
+                        <option value="4">4월</option>
+                        <option value="5">5월</option>
+                        <option value="6">6월</option>
+                        <option value="7">7월</option>
+                        <option value="8">8월</option>
+                        <option value="9">9월</option>
+                        <option value="10">10월</option>
+                        <option value="11">11월</option>
+                        <option value="12">12월</option>
+                    </select>
+                    <button onclick="changeDate()">변경</button>
+                </div>
+            </div>
             <button id="nextMonth">></button>
         </div>
         <table>
@@ -187,6 +241,8 @@
             const lastDay = new Date(year, month, 0);
             const dateDisplay = document.querySelector('#dateDisplay');
             dateDisplay.textContent = `${year}년 ${month}월`;
+            document.getElementById("year-select").value = year;
+            document.getElementById("month-select").value = month;
             calendarBody.innerHTML = '';
 
             let date = 1;
@@ -282,6 +338,26 @@
                 }
             }
         }
+    }
+    
+    function toggleDropdown() {
+        var dropdownContent = document.getElementById("dropdown-content");
+        dropdownContent.style.display = dropdownContent.style.display === "block" ? "none" : "block";
+    }
+        
+    function changeDate() {
+        var yearSelect = document.getElementById("year-select");
+        var monthSelect = document.getElementById("month-select");
+        var selectedYear = yearSelect.options[yearSelect.selectedIndex].value;
+        var selectedMonth = monthSelect.options[monthSelect.selectedIndex].value;
+        
+        // 선택한 날짜로 이동하는 기능을 추가합니다.
+        // 여기서는 예시로 선택한 년도와 월을 콘솔에 출력하는 것으로 대체하였습니다.
+        dateDisplay.textContent = `${selectedYear}년 ${selectedMonth}월`;
+        // 선택한 날짜로 이동하는 기능을 추가합니다.
+        currentYear = parseInt(selectedYear);
+        currentMonth = parseInt(selectedMonth);
+        updateCalendar(currentYear, currentMonth);
     }
         // 이전 달로 이동
         document.querySelector('#prevMonth').addEventListener('click', () => {

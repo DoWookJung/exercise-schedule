@@ -27,7 +27,7 @@
 <body>
 <header>
     <h3 class="logo">
-        <a href="../main/index.php">운동 캘린더</a>
+        <a href="../main/index.php">운동, 식단 관리</a>
     </h3>
     <ul class="top_menu">
 <?php
@@ -35,7 +35,7 @@
         echo "<li>홈페이지에 오신 것을 환영합니다~~~ </li>";
     }
     else {
-        $logged = $username."님 환영합니다. ";
+        $logged = $username."(Level:".$userlevel.")님 환영합니다. ";
         echo "<li>$logged</li>";
     }
 ?>
